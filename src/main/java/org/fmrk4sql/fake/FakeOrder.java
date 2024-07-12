@@ -23,36 +23,40 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.fake;
 
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import java.util.Collections;
-import java.util.List;
+import org.fmrk4sql.Orderable;
 
 /**
- * Null params for cases when freemarker template without params.
+ * Fake order for checking orderable queries.
  *
  * @since 0.1.0
  */
-public final class NullParams implements Params {
-    @Override
-    public TemplateModel get(final String key) throws TemplateModelException {
-        final ObjectWrapper wrapper = new DefaultObjectWrapper(
-            freemarker.template.Configuration.VERSION_2_3_32
-        );
-        return wrapper.wrap(null);
+public final class FakeOrder implements Orderable {
+
+    /**
+     * Column name for order.
+     */
+    private final String fcol;
+
+    /**
+     * Direction for order.
+     */
+    private final String fdir;
+
+    public FakeOrder(final String fcol, final String fdir) {
+        this.fcol = fcol;
+        this.fdir = fdir;
     }
 
     @Override
-    public boolean isEmpty() throws TemplateModelException {
-        return true;
+    public String col() {
+        return this.fcol;
     }
 
     @Override
-    public List<Param> toList() {
-        return Collections.emptyList();
+    public String direction() {
+        return this.fdir;
     }
+
 }

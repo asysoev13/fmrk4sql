@@ -34,17 +34,27 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * All freemarker template's parameters.
- * Need for base freemarker functionality inside fmrk4sql, when we are able to combine
- * different terms or fully sql bodies in single template file
+ * Decorator at Params with pageable functionality.
+ * The most frequent case of use fmrk4sql is queries with pageable support.
+ * This decorator allow support
  *
  * @since 0.1.0
  */
-public final class FmParams implements Params {
+public final class PageParams implements Params {
     /**
      * Store params for freemarker template parse.
      */
     private final List<Param> params;
+
+    /**
+     * Link at decorated object.
+     */
+    private final transient Params origin;
+
+    /**
+     * Link at decorated object.
+     */
+    private final transient Pageable pageable;
 
     /**
      * Wrapper over java object for freemarker parser.
@@ -52,13 +62,21 @@ public final class FmParams implements Params {
      */
     private final ObjectWrapper wrapper;
 
-    public FmParams(final List<Param> params) {
-        this.params = new ArrayList<>(params);
+    public PageParams(final Params origin, final Pageable pageable) {
+        this.origin = origin;
+        this.pageable = pageable;
+        this.params = new ArrayList<>(this.origin.toList().size());
         this.wrapper = new DefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_32);
     }
 
     @Override
     public TemplateModel get(final String name) throws TemplateModelException {
+        if (this.params.isEmpty()) {
+            this.params.addAll(this.origin.toList());
+            this.params.add(new FmParam("page", this.pageable.page()));
+            this.params.add(new FmParam("size", this.pageable.size()));
+            this.params.add(new FmParam("orders", this.pageable.orders()));
+        }
         TemplateModel result = null;
         for (final Param param : this.params) {
             if (name.equals(param.name())) {

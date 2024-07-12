@@ -45,23 +45,59 @@ For example we can have single query where in some case we can switch off pagina
 So template will be look like this:
 ```xml
 <#ftl encoding="utf-8">
-<#-- @vtlvariable name="paginate" type="java.lang.Boolean" -->
-select foo, bar from foobar_table
-<#if paginate==true>
-offset 1 limit 10
+<#-- @vtlvariable name="union" type="java.lang.Boolean" -->
+select foo, bar from foo_table
+<#if union==true>
+union all
+select foo, bar from bar_table
 </#if>
 ```
 ```java
-final Params params = new FmParams(List.of(new FmParam("paginate", true)));
+final Params params = new FmParams(List.of(new FmParam("union", true)));
 ```
 The result of parsing will be
 ```sql
-select foo, bar from foobar_table
-offset 1 limit 10
+select foo, bar from foo_table
+union all
+select foo, bar from bar_table
 ```
 
 ```java
 final Params params = new FmParams(Collections.EMPTY_LIST);
 final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
 query.parse(params);
+```
+
+## Pageable & order
+
+The most frequently cases of use params in queries is pagination. So **fmrk4sql** has special class
+for include pagination and order in queries. For Spring platform pagination functions uses 
+**org.springframework.data.domain.Pageable** interface there implemented special class also.
+
+Simple pagination and order when Spring controller (GET: api/get?page=0&size=10&sort=col1,asc) 
+gets pagination (Pageable springPagination) and we can use pagination for query:
+
+```xml
+select col1, col2 from ${table_name}
+<#if orders?has_content>
+order by
+<#list orders as ord>
+${ord.col()} ${ord.direction()}
+</#list>
+</#if>
+limit ${size} offset ${page}
+```
+
+```java
+Params params = new PageParams(
+    new FmParams(List.of(new FmParam("table_name", "orderable_table"))), 
+    new SpringPage(springPagination)
+);
+Query query = new StrQuery(template);
+query.parse(params);
+```
+
+The result of parsing will be:
+```sql
+select col1, col2 from orderable_table order by col1 ASC limit 10 offset 0
 ```

@@ -25,34 +25,30 @@
 
 package org.fmrk4sql;
 
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Null params for cases when freemarker template without params.
+ * Interface that allow easy support pagination and ordering.
  *
  * @since 0.1.0
  */
-public final class NullParams implements Params {
-    @Override
-    public TemplateModel get(final String key) throws TemplateModelException {
-        final ObjectWrapper wrapper = new DefaultObjectWrapper(
-            freemarker.template.Configuration.VERSION_2_3_32
-        );
-        return wrapper.wrap(null);
-    }
+public interface Pageable {
 
-    @Override
-    public boolean isEmpty() throws TemplateModelException {
-        return true;
-    }
+    /**
+     * Page number.
+     * @return Page
+     */
+    Long page();
 
-    @Override
-    public List<Param> toList() {
-        return Collections.emptyList();
-    }
+    /**
+     * Items amount per page.
+     * @return Amount
+     */
+    Integer size();
+
+    /**
+     * Sql query ordering.
+     * @return List of orderable columns.
+     */
+    List<Orderable> orders();
 }
