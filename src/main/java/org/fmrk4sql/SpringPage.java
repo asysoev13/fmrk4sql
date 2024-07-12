@@ -25,57 +25,61 @@
 
 package org.fmrk4sql;
 
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * All freemarker template's parameters.
- * Need for base freemarker functionality inside fmrk4sql, when we are able to combine
- * different terms or fully sql bodies in single template file
+ * Pagination that based on Spring pagination implementation.
  *
  * @since 0.1.0
  */
-public final class FmParams implements Params {
-    /**
-     * Store params for freemarker template parse.
-     */
-    private final List<Param> params;
+public final class SpringPage implements Pageable {
 
     /**
-     * Wrapper over java object for freemarker parser.
-     * Need to initialize one time and multiple use in get method.
+     * Pageable of spring framework.
      */
-    private final ObjectWrapper wrapper;
+    private final org.springframework.data.domain.Pageable pageable;
 
-    public FmParams(final List<Param> params) {
-        this.params = new ArrayList<>(params);
-        this.wrapper = new DefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_32);
+    public SpringPage(final org.springframework.data.domain.Pageable pageable) {
+        this.pageable = pageable;
     }
 
     @Override
-    public TemplateModel get(final String name) throws TemplateModelException {
-        TemplateModel result = null;
-        for (final Param param : this.params) {
-            if (name.equals(param.name())) {
-                result = this.wrapper.wrap(param.value());
-                break;
-            }
+    public Long page() {
+        final Long result;
+        if (this.pageable.isPaged()) {
+            result = this.pageable.getOffset();
+        } else {
+            throw new IllegalArgumentException(
+                "Pageable is not defined by Spring in pageable argument"
+            );
         }
         return result;
     }
 
     @Override
-    public boolean isEmpty() {
-        return this.params.isEmpty();
+    public Integer size() {
+        final Integer result;
+        if (this.pageable.isPaged()) {
+            result = this.pageable.getPageSize();
+        } else {
+            throw new IllegalArgumentException(
+                "Pageable is not defined by Spring in pageable argument"
+            );
+        }
+        return result;
     }
 
     @Override
-    public List<Param> toList() {
-        return Collections.unmodifiableList(this.params);
+    public List<Orderable> orders() {
+        final List<Orderable> result;
+        if (this.pageable.getSort().isSorted()) {
+            result = this.pageable.getSort().get()
+                .map(p -> new SpringOrder(p)).collect(Collectors.toList());
+        } else {
+            result = Collections.EMPTY_LIST;
+        }
+        return result;
     }
 }

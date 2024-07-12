@@ -23,36 +23,52 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.fake;
 
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import java.util.Collections;
 import java.util.List;
+import org.fmrk4sql.Orderable;
+import org.fmrk4sql.Pageable;
 
 /**
- * Null params for cases when freemarker template without params.
+ * Fake pageable for checking pageable queries.
  *
  * @since 0.1.0
  */
-public final class NullParams implements Params {
-    @Override
-    public TemplateModel get(final String key) throws TemplateModelException {
-        final ObjectWrapper wrapper = new DefaultObjectWrapper(
-            freemarker.template.Configuration.VERSION_2_3_32
-        );
-        return wrapper.wrap(null);
+public final class FakePageable implements Pageable {
+
+    /**
+     * Page number.
+     */
+    private final Long fpage;
+
+    /**
+     * Elements on page.
+     */
+    private final Integer fsize;
+
+    /**
+     * Orders for query.
+     */
+    private final List<Orderable> forder;
+
+    public FakePageable(final Long fpage, final Integer fsize, final List<Orderable> forder) {
+        this.fpage = fpage;
+        this.fsize = fsize;
+        this.forder = forder;
     }
 
     @Override
-    public boolean isEmpty() throws TemplateModelException {
-        return true;
+    public Long page() {
+        return this.fpage;
     }
 
     @Override
-    public List<Param> toList() {
-        return Collections.emptyList();
+    public Integer size() {
+        return this.fsize;
+    }
+
+    @Override
+    public List<Orderable> orders() {
+        return this.forder;
     }
 }

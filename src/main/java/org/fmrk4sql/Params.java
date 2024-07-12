@@ -26,6 +26,7 @@
 package org.fmrk4sql;
 
 import freemarker.template.TemplateHashModel;
+import java.util.List;
 
 /**
  * Freemarker template params.
@@ -33,5 +34,5 @@ import freemarker.template.TemplateHashModel;
  * @since 0.1.0
  */
 public interface Params extends TemplateHashModel {
-
+    List<Param> toList();
 }
