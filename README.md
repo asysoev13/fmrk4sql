@@ -33,7 +33,7 @@ First is use [StrQuery.java](src%2Fmain%2Fjava%2Forg%2Ffmrk4sql%2FStrQuery.java)
 for parse freemarker template from String view:
 
 ```java
-final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
+final Query query = new StrQuery("select count()");
 query.parse(FmParams.EMPTY);
 ```
 
@@ -43,7 +43,6 @@ For example we can have single query where in some case we can switch off pagina
 
 So template will be look like this:
 ```xml
-<#ftl encoding="utf-8">
 <#-- @vtlvariable name="union" type="java.lang.Boolean" -->
 select foo, bar from foo_table
 <#if union==true>
@@ -62,7 +61,7 @@ select foo, bar from bar_table
 ```
 
 ```java
-final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
+final Query query = new StrQuery("select count()");
 query.parse(FmParams.EMPTY);
 ```
 

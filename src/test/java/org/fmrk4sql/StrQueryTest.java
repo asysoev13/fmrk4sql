@@ -43,14 +43,9 @@ import org.springframework.data.domain.Sort;
  */
 final class StrQueryTest {
 
-    /**
-     * Header of ftl files.
-     */
-    private static final String FTL_ENCODING = "<#ftl encoding=\"utf-8\">";
-
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
-        final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
+        final Query query = new StrQuery("select count()");
         Assertions.assertEquals("select count()", query.parse(FmParams.EMPTY));
     }
 
@@ -58,7 +53,6 @@ final class StrQueryTest {
     void parseSimpleQueryIfBoolean() throws TemplateException, IOException {
         final String template = String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "<#-- @vtlvariable name=\"plan\" type=\"java.lang.Boolean\" -->",
             "<#if plan==true>",
             "select sum(plan_value) from table",
@@ -75,7 +69,6 @@ final class StrQueryTest {
     void parseSimpleQueryTableName() throws TemplateException, IOException {
         final String template =  String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "select sum(plan_value) from ${table_name}"
         );
         final Params params = new FmParams(
@@ -90,7 +83,6 @@ final class StrQueryTest {
     void parsePageableParams() throws TemplateException, IOException {
         final String template = String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "select sum(plan_value) from ${table_name} ",
             "limit ${size} offset ${page}"
         );
@@ -110,7 +102,6 @@ final class StrQueryTest {
     void parseOnlyPageableParams() throws TemplateException, IOException {
         final String template =  String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "select sum(plan_value) from constant_table ",
             "limit ${size} offset ${page}"
         );
@@ -130,7 +121,6 @@ final class StrQueryTest {
     void parsePageableOrderable() throws TemplateException, IOException {
         final String template =  String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "select col1, col2 from ${table_name}",
             "<#if orders?has_content> ",
             "order by ",
@@ -163,7 +153,6 @@ final class StrQueryTest {
         );
         final String template =  String.join(
             "",
-            StrQueryTest.FTL_ENCODING,
             "select col1, col2 from ${table_name}",
             "<#if orders?has_content> ",
             "order by ",
