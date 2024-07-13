@@ -27,7 +27,6 @@ package org.fmrk4sql;
 
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,10 +39,9 @@ final class FtlQueryTest {
 
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
-        final Params params = new FmParams(Collections.EMPTY_LIST);
         final Query query = new FtlQuery("/ftltest", "simple_query_no_param.sql");
         Assertions
-            .assertEquals("select count()", query.parse(params));
+            .assertEquals("select count()", query.parse(FmParams.EMPTY));
     }
 
     @Test

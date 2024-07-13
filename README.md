@@ -33,9 +33,8 @@ First is use [StrQuery.java](src%2Fmain%2Fjava%2Forg%2Ffmrk4sql%2FStrQuery.java)
 for parse freemarker template from String view:
 
 ```java
-final Params params = new FmParams(Collections.EMPTY_LIST);
 final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
-query.parse(params);
+query.parse(FmParams.EMPTY);
 ```
 
 There we have to use [FmParams.java](src%2Fmain%2Fjava%2Forg%2Ffmrk4sql%2FFmParams.java) is for 
@@ -63,9 +62,8 @@ select foo, bar from bar_table
 ```
 
 ```java
-final Params params = new FmParams(Collections.EMPTY_LIST);
 final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
-query.parse(params);
+query.parse(FmParams.EMPTY);
 ```
 
 ## Pageable & order
