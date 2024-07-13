@@ -50,9 +50,8 @@ final class StrQueryTest {
 
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
-        final Params params = new FmParams(Collections.EMPTY_LIST);
         final Query query = new StrQuery("<#ftl encoding=\"utf-8\">\nselect count()");
-        Assertions.assertEquals("select count()", query.parse(params));
+        Assertions.assertEquals("select count()", query.parse(FmParams.EMPTY));
     }
 
     @Test

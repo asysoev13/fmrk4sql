@@ -42,6 +42,11 @@ import java.util.List;
  */
 public final class FmParams implements Params {
     /**
+     * The empty parameters for query.
+     */
+    public static final FmParams EMPTY = new FmParams(Collections.EMPTY_LIST);
+
+    /**
      * Store params for freemarker template parse.
      */
     private final List<Param> params;
