@@ -67,6 +67,7 @@
                         <excludes>
                             <exclude>dependencies:org.hamcrest</exclude>
                             <exclude>dependencies:org.freemarker</exclude>
+                            <exclude>dependencies:com.google.guava</exclude>
                         </excludes>
                     </configuration>
                     <executions>
