@@ -29,9 +29,9 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.fmrk4sql.fake.FakeOrder;
 import org.fmrk4sql.fake.FakePageable;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +46,8 @@ final class StrQueryTest {
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
         final Query query = new StrQuery("select count()");
-        Assertions.assertEquals("select count()", query.parse(FmParams.EMPTY));
+        Assertions.assertThat(query.parse(FmParams.EMPTY))
+            .isEqualTo("select count()");
     }
 
     @Test
@@ -62,7 +63,8 @@ final class StrQueryTest {
         );
         final Params params = new FmParams(List.of(new FmParam("plan", true)));
         final Query query = new StrQuery(template);
-        Assertions.assertEquals("select sum(plan_value) from table", query.parse(params));
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(plan_value) from table");
     }
 
     @Test
@@ -75,27 +77,24 @@ final class StrQueryTest {
             List.of(new FmParam("table_name", "fmrk_table"))
         );
         final Query query = new StrQuery(template);
-        Assertions
-            .assertEquals("select sum(plan_value) from fmrk_table", query.parse(params));
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(plan_value) from fmrk_table");
     }
 
     @Test
     void parsePageableParams() throws TemplateException, IOException {
         final String template = String.join(
             "",
-            "select sum(plan_value) from ${table_name} ",
+            "select sum(plan_value) from ${table_name1} ",
             "limit ${size} offset ${page}"
         );
         final Params params = new PageParams(
-            new FmParams(List.of(new FmParam("table_name", "fmrk_table"))),
+            new FmParams(List.of(new FmParam("table_name1", "fmrk_table"))),
             new FakePageable(0L, 10, Collections.EMPTY_LIST)
         );
         final Query query = new StrQuery(template);
-        Assertions
-            .assertEquals(
-                "select sum(plan_value) from fmrk_table limit 10 offset 0",
-                query.parse(params)
-        );
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(plan_value) from fmrk_table limit 10 offset 0");
     }
 
     @Test
@@ -110,18 +109,15 @@ final class StrQueryTest {
             new FakePageable(0L, 10, Collections.EMPTY_LIST)
         );
         final Query query = new StrQuery(template);
-        Assertions
-            .assertEquals(
-                "select sum(plan_value) from constant_table limit 10 offset 0",
-                query.parse(params)
-        );
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(plan_value) from constant_table limit 10 offset 0");
     }
 
     @Test
     void parsePageableOrderable() throws TemplateException, IOException {
         final String template =  String.join(
             "",
-            "select col1, col2 from ${table_name}",
+            "select col1, col2 from ${table_name2}",
             "<#if orders?has_content> ",
             "order by ",
             "<#list orders as ord>",
@@ -132,16 +128,15 @@ final class StrQueryTest {
         );
         final Params params = new PageParams(
             new FmParams(
-                List.of(new FmParam("table_name", "orderable_table"))
+                List.of(new FmParam("table_name2", "orderable_table"))
             ),
             new FakePageable(0L, 10, List.of(new FakeOrder("col1", "ASC")))
         );
         final Query query = new StrQuery(template);
-        Assertions
-            .assertEquals(
-                "select col1, col2 from orderable_table order by col1 ASC limit 10 offset 0",
-                query.parse(params)
-        );
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo(
+                "select col1, col2 from orderable_table order by col1 ASC limit 10 offset 0"
+            );
     }
 
     @Test
@@ -153,7 +148,7 @@ final class StrQueryTest {
         );
         final String template =  String.join(
             "",
-            "select col1, col2 from ${table_name}",
+            "select col1, col2 from ${table_name3}",
             "<#if orders?has_content> ",
             "order by ",
             "<#list orders as ord>",
@@ -164,15 +159,14 @@ final class StrQueryTest {
         );
         final Params params = new PageParams(
             new FmParams(
-                List.of(new FmParam("table_name", "orderable_table"))
+                List.of(new FmParam("table_name3", "orderable_table"))
             ),
             new SpringPage(spring)
         );
         final Query query = new StrQuery(template);
-        Assertions
-            .assertEquals(
-                "select col1, col2 from orderable_table order by test_col ASC limit 20 offset 0",
-                query.parse(params)
-        );
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo(
+                "select col1, col2 from orderable_table order by test_col ASC limit 20 offset 0"
+            );
     }
 }

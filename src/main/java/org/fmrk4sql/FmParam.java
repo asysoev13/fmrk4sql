@@ -25,12 +25,17 @@
 
 package org.fmrk4sql;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 /**
  * Freemarker template parameter.
  * Contains name and value of parameter
  * @param <P> - Type of parameter
  * @since 0.1.0
  */
+@EqualsAndHashCode
+@ToString
 public final class FmParam<P> implements Param {
     /**
      * Parameter name.
@@ -55,5 +60,16 @@ public final class FmParam<P> implements Param {
     @Override
     public P value() {
         return this.pval;
+    }
+
+    @Override
+    public Param copy(final String name) {
+        final Param result;
+        if (name == null || "".equals(name)) {
+            result = new FmParam(this.pname, this.pval);
+        } else {
+            result = new FmParam(name, this.pval);
+        }
+        return result;
     }
 }

@@ -25,34 +25,48 @@
 
 package org.fmrk4sql;
 
-import lombok.EqualsAndHashCode;
-import org.springframework.data.domain.Sort;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * Interface that allow easy support pagination and ordering.
- *
+ * Tests for FmParams class.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-public final class SpringOrder implements Orderable {
-
-    /**
-     * Orderable from spring framework.
-     */
-    private final Sort.Order sort;
-
-    public SpringOrder(final Sort.Order sort) {
-        this.sort = sort;
+final class FmParamsTest {
+    @Test
+    void fmParamsToList() {
+        final Params params = new FmParams(
+            List.of(
+                new FmParam("table_name", "fmrk_table"),
+                new FmParam("date", LocalDate.of(2024, 01, 01))
+            )
+        );
+        final List<Param> expected = List.of(
+            new FmParam("table_name", "fmrk_table"),
+            new FmParam("date", LocalDate.of(2024, 01, 01))
+        );
+        Assertions
+            .assertEquals(expected, params.toList());
     }
 
-    @Override
-    public String col() {
-        return this.sort.getProperty();
+    @Test
+    void fmParamsToMap() {
+        final Params params = new FmParams(
+            List.of(
+                new FmParam("table_name", "fmrk_table"),
+                new FmParam("date", LocalDate.of(2024, 01, 01))
+            )
+        );
+        final Map<String, Object> expected = Map.of(
+            "date",
+            LocalDate.of(2024, 01, 01),
+            "table_name",
+            "fmrk_table"
+        );
+        Assertions
+            .assertEquals(expected, params.map());
     }
-
-    @Override
-    public String direction() {
-        return this.sort.getDirection().name();
-    }
-
 }

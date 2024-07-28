@@ -31,7 +31,10 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import lombok.EqualsAndHashCode;
 
 /**
  * All freemarker template's parameters.
@@ -40,6 +43,7 @@ import java.util.List;
  *
  * @since 0.1.0
  */
+@EqualsAndHashCode
 public final class FmParams implements Params {
     /**
      * The empty parameters for query.
@@ -82,5 +86,14 @@ public final class FmParams implements Params {
     @Override
     public List<Param> toList() {
         return Collections.unmodifiableList(this.params);
+    }
+
+    @Override
+    public Map<String, Object> map() {
+        final Map<String, Object> result = new HashMap<>(this.params.size());
+        for (final Param param : this.params) {
+            result.put(param.name(), param.value());
+        }
+        return result;
     }
 }

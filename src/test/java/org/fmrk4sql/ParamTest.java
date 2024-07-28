@@ -23,53 +23,31 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.fake;
+package org.fmrk4sql;
 
-import org.fmrk4sql.FmParam;
-import org.fmrk4sql.Param;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * Fake typed params.
- *
- * @param <P> - type of param
- *
+ * Tests for param class.
  * @since 0.1.0
  */
-public final class FakeParam<P> implements Param {
-
-    /**
-     * Param name.
-     */
-    private final String pname;
-
-    /**
-     * Param type.
-     */
-    private final P pval;
-
-    public FakeParam(final String pname, final P pval) {
-        this.pname = pname;
-        this.pval = pval;
+final class ParamTest {
+    @Test
+    void fmParamCopyNullName() {
+        final Param param = new FmParam("table_name", "fmrk_table");
+        final Param expected = new FmParam("table_name", "fmrk_table");
+        Assertions
+            .assertThat(param.copy(null))
+            .isEqualTo(expected);
     }
 
-    @Override
-    public String name() {
-        return this.pname;
-    }
-
-    @Override
-    public P value() {
-        return this.pval;
-    }
-
-    @Override
-    public Param copy(final String name) {
-        final Param result;
-        if ("".equals(name)) {
-            result = new FmParam(this.pname, this.pval);
-        } else {
-            result = new FmParam(name, this.pval);
-        }
-        return result;
+    @Test
+    void fmParamCopy() {
+        final Param param = new FmParam("table_name", "fmrk_table");
+        final Param expected = new FmParam("new_name", "fmrk_table");
+        Assertions
+            .assertThat(param.copy("new_name"))
+            .isEqualTo(expected);
     }
 }
