@@ -27,15 +27,17 @@ package org.fmrk4sql;
 
 import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateModelException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for params.
+ * Tests for CaseParams class.
  * @since 0.1.0
  */
-final class ParamsTest {
+final class CaseParamsTest {
     @Test
     void fromLowerCamelTest() throws TemplateModelException {
         final Params params = new CaseParams(
@@ -44,5 +46,47 @@ final class ParamsTest {
             CaseFormat.LOWER_UNDERSCORE
         );
         Assertions.assertEquals("value", params.get("foo_bar").toString());
+    }
+
+    @Test
+    void caseParamsToList() {
+        final Params params = new CaseParams(
+            new FmParams(
+                List.of(
+                    new FmParam("paramDate", LocalDate.of(2024, 01, 01)),
+                    new FmParam("tableName", "fmrk_table")
+                )
+            ),
+            CaseFormat.LOWER_CAMEL,
+            CaseFormat.LOWER_UNDERSCORE
+        );
+        final List<Param> expected = List.of(
+            new FmParam("param_date", LocalDate.of(2024, 01, 01)),
+            new FmParam("table_name", "fmrk_table")
+        );
+        Assertions
+            .assertEquals(expected, params.toList());
+    }
+
+    @Test
+    void caseParamsToMap() {
+        final Params params = new CaseParams(
+            new FmParams(
+                List.of(
+                    new FmParam("paramDate", LocalDate.of(2024, 01, 01)),
+                    new FmParam("tableName", "fmrk_table")
+                )
+            ),
+            CaseFormat.LOWER_CAMEL,
+            CaseFormat.LOWER_UNDERSCORE
+        );
+        final Map<String, Object> expected = Map.of(
+            "param_date",
+            LocalDate.of(2024, 01, 01),
+            "table_name",
+            "fmrk_table"
+        );
+        Assertions
+            .assertEquals(expected, params.map());
     }
 }

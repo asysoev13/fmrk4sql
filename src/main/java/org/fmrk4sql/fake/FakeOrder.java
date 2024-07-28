@@ -25,6 +25,7 @@
 
 package org.fmrk4sql.fake;
 
+import lombok.EqualsAndHashCode;
 import org.fmrk4sql.Orderable;
 
 /**
@@ -32,6 +33,7 @@ import org.fmrk4sql.Orderable;
  *
  * @since 0.1.0
  */
+@EqualsAndHashCode
 public final class FakeOrder implements Orderable {
 
     /**
