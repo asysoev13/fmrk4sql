@@ -30,7 +30,7 @@ import freemarker.template.TemplateModelException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -45,7 +45,7 @@ final class CaseParamsTest {
             CaseFormat.LOWER_CAMEL,
             CaseFormat.LOWER_UNDERSCORE
         );
-        Assertions.assertEquals("value", params.get("foo_bar").toString());
+        Assertions.assertThat(params.get("foo_bar").toString()).isEqualTo("value");
     }
 
     @Test
@@ -64,8 +64,7 @@ final class CaseParamsTest {
             new FmParam("param_date", LocalDate.of(2024, 01, 01)),
             new FmParam("table_name", "fmrk_table")
         );
-        Assertions
-            .assertEquals(expected, params.toList());
+        Assertions.assertThat(params.toList()).isEqualTo(expected);
     }
 
     @Test
@@ -86,7 +85,6 @@ final class CaseParamsTest {
             "table_name",
             "fmrk_table"
         );
-        Assertions
-            .assertEquals(expected, params.map());
+        Assertions.assertThat(params.map()).isEqualTo(expected);
     }
 }

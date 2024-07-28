@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Code quality check
-      run: mvn -B qulice:check --file pom.xml
+      run: mvn -B qulice:check checkstyle:check --file pom.xml
       
     - name: Build with Maven
       run: mvn -B package --file pom.xml

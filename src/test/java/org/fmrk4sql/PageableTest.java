@@ -25,7 +25,7 @@
 
 package org.fmrk4sql;
 
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
 
@@ -40,7 +40,7 @@ final class PageableTest {
         final org.springframework.data.domain.Pageable spring =
             org.springframework.data.domain.Pageable.ofSize(200);
         final Pageable pageable = new SpringPage(spring);
-        Assertions.assertEquals(0, pageable.page());
+        Assertions.assertThat(pageable.page()).isEqualTo(0);
     }
 
     @Test
@@ -48,7 +48,7 @@ final class PageableTest {
         final org.springframework.data.domain.Pageable spring =
             org.springframework.data.domain.Pageable.ofSize(200);
         final Pageable pageable = new SpringPage(spring);
-        Assertions.assertEquals(200, pageable.size());
+        Assertions.assertThat(pageable.size()).isEqualTo(200);
     }
 
     @Test
@@ -56,14 +56,13 @@ final class PageableTest {
         final org.springframework.data.domain.Pageable spring =
             org.springframework.data.domain.Pageable.unpaged();
         final Pageable pageable = new SpringPage(spring);
-        final IllegalArgumentException expected = Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> pageable.size(),
-            "Expected exception, where pageable is not defined by Spring"
+        final IllegalArgumentException exception = Assertions.catchThrowableOfType(
+            () -> pageable.size(), IllegalArgumentException.class
         );
-        Assertions.assertTrue(
-            expected.getMessage().contains("Pageable is not defined by Spring in pageable argument")
-        );
+        Assertions
+            .assertThat(exception)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Pageable is not defined by Spring in pageable argument");
     }
 
     @Test
@@ -71,7 +70,7 @@ final class PageableTest {
         final Orderable orderable = new SpringOrder(
             new Sort.Order(Sort.Direction.ASC, "test_col")
         );
-        Assertions.assertEquals("ASC", orderable.direction());
+        Assertions.assertThat(orderable.direction()).isEqualTo("ASC");
     }
 
     @Test
@@ -79,6 +78,6 @@ final class PageableTest {
         final Orderable orderable = new SpringOrder(
             new Sort.Order(Sort.Direction.ASC, "test_col")
         );
-        Assertions.assertEquals("test_col", orderable.col());
+        Assertions.assertThat(orderable.col()).isEqualTo("test_col");
     }
 }

@@ -25,8 +25,8 @@
 
 package org.fmrk4sql;
 
+import org.assertj.core.api.Assertions;
 import org.fmrk4sql.fake.FakeQuery;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,6 +38,6 @@ final class QueryTest {
     @Test
     void checkParseSimpleQuery() throws Exception {
         final Query query = new FakeQuery("select count()");
-        Assertions.assertEquals("select count()", query.parse(new NullParams()));
+        Assertions.assertThat(query.parse(new NullParams())).isEqualTo("select count()");
     }
 }
