@@ -84,7 +84,7 @@ public final class FmParams implements Params {
     }
 
     @Override
-    public List<Param> toList() {
+    public List<Param> list() {
         return Collections.unmodifiableList(this.params);
     }
 

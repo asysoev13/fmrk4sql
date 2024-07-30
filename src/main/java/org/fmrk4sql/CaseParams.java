@@ -80,7 +80,7 @@ public final class CaseParams implements Params {
     @Override
     public TemplateModel get(final String name) throws TemplateModelException {
         TemplateModel result = null;
-        for (final Param param : this.origin.toList()) {
+        for (final Param param : this.origin.list()) {
             if (name.equals(this.input.to(this.output, param.name()))) {
                 result = this.wrapper.wrap(param.value());
                 break;
@@ -91,13 +91,13 @@ public final class CaseParams implements Params {
 
     @Override
     public boolean isEmpty() {
-        return this.origin.toList().isEmpty();
+        return this.origin.list().isEmpty();
     }
 
     @Override
-    public List<Param> toList() {
-        final List<Param> result = new ArrayList<>(this.origin.toList().size());
-        for (final Param param : this.origin.toList()) {
+    public List<Param> list() {
+        final List<Param> result = new ArrayList<>(this.origin.list().size());
+        for (final Param param : this.origin.list()) {
             result.add(param.copy(this.input.to(this.output, param.name())));
         }
         return result;
@@ -105,8 +105,8 @@ public final class CaseParams implements Params {
 
     @Override
     public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>(this.toList().size());
-        for (final Param param : this.toList()) {
+        final Map<String, Object> result = new HashMap<>(this.list().size());
+        for (final Param param : this.list()) {
             result.put(param.name(), param.value());
         }
         return result;

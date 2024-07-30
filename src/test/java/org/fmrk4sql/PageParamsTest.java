@@ -61,7 +61,7 @@ final class PageParamsTest {
                 List.of(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
             )
         );
-        Assertions.assertThat(actual.toList())
+        Assertions.assertThat(actual.list())
             .hasSize(expected.size())
             .extracting("pname", "pval")
             .containsExactlyElementsOf(

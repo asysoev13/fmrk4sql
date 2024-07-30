@@ -64,7 +64,7 @@ final class CaseParamsTest {
             new FmParam("param_date", LocalDate.of(2024, 01, 01)),
             new FmParam("table_name", "fmrk_table")
         );
-        Assertions.assertThat(params.toList()).isEqualTo(expected);
+        Assertions.assertThat(params.list()).isEqualTo(expected);
     }
 
     @Test

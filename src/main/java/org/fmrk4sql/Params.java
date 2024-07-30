@@ -35,7 +35,7 @@ import java.util.Map;
  * @since 0.1.0
  */
 public interface Params extends TemplateHashModel {
-    List<Param> toList();
+    List<Param> list();
 
     Map<String, Object> map();
 }
