@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -37,26 +37,8 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -77,10 +59,30 @@
                     <configuration>
                         <license>file:${basedir}/LICENSE.txt</license>
                         <excludes>
-                            <exclude>dependencies:org.hamcrest</exclude>
+                            <exclude>dependencies:org.junit.jupiter</exclude>
+                            <exclude>dependencies:org.assertj</exclude>
                             <exclude>dependencies:org.freemarker</exclude>
                             <exclude>dependencies:com.google.guava</exclude>
                         </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--
+                Include custom checkstyle for disable using Asserts in test except org.assertj
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.4.0</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     </configuration>
                     <executions>
                         <execution>

@@ -28,6 +28,7 @@ package org.fmrk4sql;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,12 +61,12 @@ final class PageParamsTest {
                 List.of(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
             )
         );
-        org.assertj.core.api.Assertions.assertThat(actual.toList())
+        Assertions.assertThat(actual.toList())
             .hasSize(expected.size())
             .extracting("pname", "pval")
             .containsExactlyElementsOf(
                 expected.stream().map(
-                    p -> org.assertj.core.api.Assertions.tuple(p.name(), p.value())
+                    p -> Assertions.tuple(p.name(), p.value())
                 ).collect(Collectors.toList())
             );
     }
@@ -93,6 +94,6 @@ final class PageParamsTest {
             "orders",
             List.of(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
         );
-        org.assertj.core.api.Assertions.assertThat(actual.map()).isEqualTo(expected);
+        Assertions.assertThat(actual.map()).isEqualTo(expected);
     }
 }

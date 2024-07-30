@@ -28,7 +28,7 @@ package org.fmrk4sql;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -40,8 +40,7 @@ final class FtlQueryTest {
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
         final Query query = new FtlQuery("/ftltest", "simple_query_no_param.sql");
-        Assertions
-            .assertEquals("select count()", query.parse(FmParams.EMPTY));
+        Assertions.assertThat(query.parse(FmParams.EMPTY)).isEqualTo("select count()");
     }
 
     @Test
@@ -50,8 +49,8 @@ final class FtlQueryTest {
         final Query query = new FtlQuery(
             "/ftltest", "parse_simple_query_if_boolean.sql"
         );
-        Assertions
-            .assertEquals("select sum(fact_value) from table", query.parse(params));
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(fact_value) from table");
     }
 
     @Test
@@ -62,7 +61,7 @@ final class FtlQueryTest {
         final Query query = new FtlQuery(
             "/ftltest", "parse_simple_query_table_name.sql"
         );
-        Assertions
-            .assertEquals("select sum(plan_value) from fmrk_table", query.parse(params));
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo("select sum(plan_value) from fmrk_table");
     }
 }

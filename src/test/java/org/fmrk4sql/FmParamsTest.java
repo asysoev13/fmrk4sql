@@ -28,7 +28,7 @@ package org.fmrk4sql;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,8 +48,7 @@ final class FmParamsTest {
             new FmParam("table_name", "fmrk_table"),
             new FmParam("date", LocalDate.of(2024, 01, 01))
         );
-        Assertions
-            .assertEquals(expected, params.toList());
+        Assertions.assertThat(params.toList()).isEqualTo(expected);
     }
 
     @Test
@@ -66,7 +65,6 @@ final class FmParamsTest {
             "table_name",
             "fmrk_table"
         );
-        Assertions
-            .assertEquals(expected, params.map());
+        Assertions.assertThat(params.map()).isEqualTo(expected);
     }
 }
