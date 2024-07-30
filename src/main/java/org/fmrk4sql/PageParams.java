@@ -67,14 +67,14 @@ public final class PageParams implements Params {
     public PageParams(final Params origin, final Pageable pageable) {
         this.origin = origin;
         this.pageable = pageable;
-        this.params = new ArrayList<>(this.origin.toList().size());
+        this.params = new ArrayList<>(this.origin.list().size());
         this.wrapper = new DefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_32);
     }
 
     @Override
     public TemplateModel get(final String name) throws TemplateModelException {
         if (this.params.isEmpty()) {
-            this.params.addAll(this.origin.toList());
+            this.params.addAll(this.origin.list());
             this.params.add(new FmParam("page", this.pageable.page()));
             this.params.add(new FmParam("size", this.pageable.size()));
             this.params.add(new FmParam("orders", this.pageable.orders()));
@@ -95,9 +95,9 @@ public final class PageParams implements Params {
     }
 
     @Override
-    public List<Param> toList() {
+    public List<Param> list() {
         if (this.params.isEmpty()) {
-            this.params.addAll(this.origin.toList());
+            this.params.addAll(this.origin.list());
             this.params.add(new FmParam("page", this.pageable.page()));
             this.params.add(new FmParam("size", this.pageable.size()));
             this.params.add(new FmParam("orders", this.pageable.orders()));
@@ -107,8 +107,8 @@ public final class PageParams implements Params {
 
     @Override
     public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>(this.toList().size());
-        for (final Param param : this.toList()) {
+        final Map<String, Object> result = new HashMap<>(this.list().size());
+        for (final Param param : this.list()) {
             result.put(param.name(), param.value());
         }
         return result;

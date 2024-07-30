@@ -53,7 +53,7 @@ public final class NullParams implements Params {
     }
 
     @Override
-    public List<Param> toList() {
+    public List<Param> list() {
         return Collections.emptyList();
     }
 

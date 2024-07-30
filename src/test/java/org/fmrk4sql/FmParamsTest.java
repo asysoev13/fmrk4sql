@@ -48,7 +48,7 @@ final class FmParamsTest {
             new FmParam("table_name", "fmrk_table"),
             new FmParam("date", LocalDate.of(2024, 01, 01))
         );
-        Assertions.assertThat(params.toList()).isEqualTo(expected);
+        Assertions.assertThat(params.list()).isEqualTo(expected);
     }
 
     @Test
