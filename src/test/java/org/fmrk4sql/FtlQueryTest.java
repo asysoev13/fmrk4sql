@@ -27,7 +27,6 @@ package org.fmrk4sql;
 
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +35,10 @@ import org.junit.jupiter.api.Test;
  * @since 0.1.0
  */
 final class FtlQueryTest {
+    /**
+     * Params factory.
+     */
+    private final ParamsFactory factory = new FmParamsFactory();
 
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
@@ -45,7 +48,7 @@ final class FtlQueryTest {
 
     @Test
     void parseSimpleQueryIfBoolean() throws TemplateException, IOException {
-        final Params params = new FmParams(List.of(new FmParam("plan", false)));
+        final Params params = this.factory.params("plan", false);
         final Query query = new FtlQuery(
             "/ftltest", "parse_simple_query_if_boolean.sql"
         );
@@ -55,9 +58,7 @@ final class FtlQueryTest {
 
     @Test
     void parseSimpleQueryTableName() throws TemplateException, IOException {
-        final Params params = new FmParams(
-            List.of(new FmParam("table_name", "fmrk_table"))
-        );
+        final Params params = this.factory.params("table_name", "fmrk_table");
         final Query query = new FtlQuery(
             "/ftltest", "parse_simple_query_table_name.sql"
         );

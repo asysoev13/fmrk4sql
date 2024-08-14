@@ -39,6 +39,11 @@ import org.springframework.data.domain.Sort;
  * @since 0.1.0
  */
 final class PageParamsTest {
+    /**
+     * Params factory.
+     */
+    private final ParamsFactory factory = new FmParamsFactory();
+
     @Test
     void pageParamsToList() {
         final Pageable spring = PageRequest.of(
@@ -46,12 +51,8 @@ final class PageParamsTest {
             20,
             Sort.by(List.of(new Sort.Order(Sort.Direction.ASC, "test_col")))
         );
-        final Params actual = new PageParams(
-            new FmParams(
-                List.of(new FmParam("table_name4", "orderable_table"))
-            ),
-            new SpringPage(spring)
-        );
+        final Params params = this.factory.params("table_name4", "orderable_table");
+        final Params actual = new PageParams(params, new SpringPage(spring));
         final List<Param> expected = List.of(
             new FmParam("table_name4", "orderable_table"),
             new FmParam("page", 0L),
@@ -78,12 +79,8 @@ final class PageParamsTest {
             20,
             Sort.by(List.of(new Sort.Order(Sort.Direction.ASC, "test_col")))
         );
-        final Params actual = new PageParams(
-            new FmParams(
-                List.of(new FmParam("table_name5", "orderable_table"))
-            ),
-            new SpringPage(spring)
-        );
+        final Params params = this.factory.params("table_name5", "orderable_table");
+        final Params actual = new PageParams(params, new SpringPage(spring));
         final Map<String, Object> expected = Map.of(
             "table_name5",
             "orderable_table",

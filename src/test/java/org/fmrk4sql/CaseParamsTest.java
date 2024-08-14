@@ -38,30 +38,35 @@ import org.junit.jupiter.api.Test;
  * @since 0.1.0
  */
 final class CaseParamsTest {
+    /**
+     * Date for tests.
+     */
+    private final LocalDate date = LocalDate.of(2024, 01, 01);
+
+    /**
+     * Params factory.
+     */
+    private final ParamsFactory factory = new CaseParamsFactory(
+        CaseFormat.LOWER_CAMEL,
+        CaseFormat.LOWER_UNDERSCORE
+    );
+
     @Test
     void fromLowerCamelTest() throws TemplateModelException {
-        final Params params = new CaseParams(
-            new FmParams(List.of(new FmParam("fooBar", "value"))),
-            CaseFormat.LOWER_CAMEL,
-            CaseFormat.LOWER_UNDERSCORE
-        );
+        final Params params = this.factory.params("fooBar", "value");
         Assertions.assertThat(params.get("foo_bar").toString()).isEqualTo("value");
     }
 
     @Test
     void caseParamsToList() {
-        final Params params = new CaseParams(
-            new FmParams(
-                List.of(
-                    new FmParam("paramDate", LocalDate.of(2024, 01, 01)),
-                    new FmParam("tableName", "fmrk_table")
-                )
-            ),
-            CaseFormat.LOWER_CAMEL,
-            CaseFormat.LOWER_UNDERSCORE
+        final Params params =  this.factory.params(
+            "paramDate",
+            this.date,
+            "tableName",
+            "fmrk_table"
         );
         final List<Param> expected = List.of(
-            new FmParam("param_date", LocalDate.of(2024, 01, 01)),
+            new FmParam("param_date", this.date),
             new FmParam("table_name", "fmrk_table")
         );
         Assertions.assertThat(params.list()).isEqualTo(expected);
@@ -69,19 +74,15 @@ final class CaseParamsTest {
 
     @Test
     void caseParamsToMap() {
-        final Params params = new CaseParams(
-            new FmParams(
-                List.of(
-                    new FmParam("paramDate", LocalDate.of(2024, 01, 01)),
-                    new FmParam("tableName", "fmrk_table")
-                )
-            ),
-            CaseFormat.LOWER_CAMEL,
-            CaseFormat.LOWER_UNDERSCORE
+        final Params params = this.factory.params(
+            "paramDate",
+            this.date,
+            "tableName",
+            "fmrk_table"
         );
         final Map<String, Object> expected = Map.of(
             "param_date",
-            LocalDate.of(2024, 01, 01),
+            this.date,
             "table_name",
             "fmrk_table"
         );

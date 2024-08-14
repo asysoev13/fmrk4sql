@@ -36,32 +36,42 @@ import org.junit.jupiter.api.Test;
  * @since 0.1.0
  */
 final class FmParamsTest {
+    /**
+     * Params factory.
+     */
+    private final ParamsFactory factory = new FmParamsFactory();
+
+    /**
+     * Date for tests.
+     */
+    private final LocalDate date = LocalDate.of(2024, 01, 01);
+
     @Test
     void fmParamsToList() {
-        final Params params = new FmParams(
-            List.of(
-                new FmParam("table_name", "fmrk_table"),
-                new FmParam("date", LocalDate.of(2024, 01, 01))
-            )
+        final Params params = this.factory.params(
+            "table_name",
+            "fmrk_table",
+            "date",
+            this.date
         );
         final List<Param> expected = List.of(
             new FmParam("table_name", "fmrk_table"),
-            new FmParam("date", LocalDate.of(2024, 01, 01))
+            new FmParam("date", this.date)
         );
         Assertions.assertThat(params.list()).isEqualTo(expected);
     }
 
     @Test
     void fmParamsToMap() {
-        final Params params = new FmParams(
-            List.of(
-                new FmParam("table_name", "fmrk_table"),
-                new FmParam("date", LocalDate.of(2024, 01, 01))
-            )
+        final Params params = this.factory.params(
+            "table_name",
+            "fmrk_table",
+            "date",
+            this.date
         );
         final Map<String, Object> expected = Map.of(
             "date",
-            LocalDate.of(2024, 01, 01),
+            this.date,
             "table_name",
             "fmrk_table"
         );
