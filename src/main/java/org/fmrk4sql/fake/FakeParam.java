@@ -72,4 +72,9 @@ public final class FakeParam<P> implements Param {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return this.value().toString();
+    }
 }

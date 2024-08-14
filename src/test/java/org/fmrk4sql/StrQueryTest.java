@@ -42,6 +42,10 @@ import org.springframework.data.domain.Sort;
  * @since 0.1.0
  */
 final class StrQueryTest {
+    /**
+     * Params this.factory.
+     */
+    private final ParamsFactory factory = new FmParamsFactory();
 
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
@@ -61,7 +65,7 @@ final class StrQueryTest {
             "select sum(fact_value) from table",
             "</#if>"
         );
-        final Params params = new FmParams(List.of(new FmParam("plan", true)));
+        final Params params = this.factory.params("plan", true);
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
             .isEqualTo("select sum(plan_value) from table");
@@ -73,9 +77,7 @@ final class StrQueryTest {
             "",
             "select sum(plan_value) from ${table_name}"
         );
-        final Params params = new FmParams(
-            List.of(new FmParam("table_name", "fmrk_table"))
-        );
+        final Params params = this.factory.params("table_name", "fmrk_table");
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
             .isEqualTo("select sum(plan_value) from fmrk_table");
@@ -88,8 +90,9 @@ final class StrQueryTest {
             "select sum(plan_value) from ${table_name1} ",
             "limit ${size} offset ${page}"
         );
+        final Params fmparams = this.factory.params("table_name1", "fmrk_table");
         final Params params = new PageParams(
-            new FmParams(List.of(new FmParam("table_name1", "fmrk_table"))),
+            fmparams,
             new FakePageable(0L, 10, Collections.EMPTY_LIST)
         );
         final Query query = new StrQuery(template);
@@ -126,10 +129,9 @@ final class StrQueryTest {
             "</#if>",
             "limit ${size} offset ${page}"
         );
+        final Params fmparams = this.factory.params("table_name2", "orderable_table");
         final Params params = new PageParams(
-            new FmParams(
-                List.of(new FmParam("table_name2", "orderable_table"))
-            ),
+            fmparams,
             new FakePageable(0L, 10, List.of(new FakeOrder("col1", "ASC")))
         );
         final Query query = new StrQuery(template);
@@ -157,12 +159,8 @@ final class StrQueryTest {
             "</#if>",
             "limit ${size} offset ${page}"
         );
-        final Params params = new PageParams(
-            new FmParams(
-                List.of(new FmParam("table_name3", "orderable_table"))
-            ),
-            new SpringPage(spring)
-        );
+        final Params fmparams = this.factory.params("table_name3", "orderable_table");
+        final Params params = new PageParams(fmparams, new SpringPage(spring));
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
             .isEqualTo(
