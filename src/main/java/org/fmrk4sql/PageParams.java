@@ -95,6 +95,11 @@ public final class PageParams implements Params {
     }
 
     @Override
+    public Params with(final Param param) {
+        return new PageParams(this.origin.with(param), this.pageable);
+    }
+
+    @Override
     public List<Param> list() {
         if (this.params.isEmpty()) {
             this.params.addAll(this.origin.list());

@@ -25,6 +25,8 @@
 
 package org.fmrk4sql.fake;
 
+import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.fmrk4sql.Orderable;
 import org.fmrk4sql.Pageable;
@@ -49,9 +51,13 @@ public final class FakePageable implements Pageable {
     /**
      * Orders for query.
      */
-    private final List<Orderable> forder;
+    private final Iterable<Orderable> forder;
 
-    public FakePageable(final Long fpage, final Integer fsize, final List<Orderable> forder) {
+    public FakePageable(final Long fpage, final Integer fsize, final Orderable... forder) {
+        this(fpage, fsize, Arrays.asList(forder));
+    }
+
+    public FakePageable(final Long fpage, final Integer fsize, final Iterable<Orderable> forder) {
         this.fpage = fpage;
         this.fsize = fsize;
         this.forder = forder;
@@ -69,6 +75,6 @@ public final class FakePageable implements Pageable {
 
     @Override
     public List<Orderable> orders() {
-        return this.forder;
+        return ImmutableList.copyOf(this.forder);
     }
 }

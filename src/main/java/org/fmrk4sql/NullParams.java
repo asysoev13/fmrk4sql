@@ -53,6 +53,11 @@ public final class NullParams implements Params {
     }
 
     @Override
+    public Params with(final Param param) {
+        throw new UnsupportedOperationException("There are no way to add param in NullParams");
+    }
+
+    @Override
     public List<Param> list() {
         return Collections.emptyList();
     }

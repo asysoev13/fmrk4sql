@@ -26,7 +26,6 @@
 package org.fmrk4sql;
 
 import com.google.common.base.CaseFormat;
-import java.util.List;
 
 /**
  * Factory for creating CaseParams.
@@ -54,9 +53,7 @@ final class CaseParamsFactory implements ParamsFactory {
     @Override
     public Params params(final String key, final Object val) {
         return new CaseParams(
-            new FmParams(
-                List.of(new FmParam(key, val))
-            ),
+            new FmParams(new FmParam(key, val)),
             this.input,
             this.output
         );
@@ -69,10 +66,8 @@ final class CaseParamsFactory implements ParamsFactory {
     ) {
         return new CaseParams(
             new FmParams(
-                List.of(
-                    new FmParam(key1, val1),
-                    new FmParam(key2, val2)
-                )
+                new FmParam(key1, val1),
+                new FmParam(key2, val2)
             ),
             this.input,
             this.output
@@ -87,11 +82,9 @@ final class CaseParamsFactory implements ParamsFactory {
     ) {
         return new CaseParams(
             new FmParams(
-                List.of(
-                    new FmParam(key1, val1),
-                    new FmParam(key2, val2),
-                    new FmParam(key3, val3)
-                )
+                new FmParam(key1, val1),
+                new FmParam(key2, val2),
+                new FmParam(key3, val3)
             ),
             this.input, this.output
         );
@@ -106,12 +99,10 @@ final class CaseParamsFactory implements ParamsFactory {
     ) {
         return new CaseParams(
             new FmParams(
-                List.of(
-                    new FmParam(key1, val1),
-                    new FmParam(key2, val2),
-                    new FmParam(key3, val3),
-                    new FmParam(key4, val4)
-                )
+                new FmParam(key1, val1),
+                new FmParam(key2, val2),
+                new FmParam(key3, val3),
+                new FmParam(key4, val4)
             ),
             this.input, this.output
         );

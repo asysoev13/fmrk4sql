@@ -47,9 +47,9 @@ public interface Param<P> {
 
     /**
      * Return copy of object with changed name.
-     * If name is EMPTY_STRING = "", should return copy of object without
+     * If name is "", should return copy of object without
      * changing name
-     * @param name New name of parameter
+     * @param name New name of new parameter
      * @return Parameter copy
      */
     Param copy(String name);

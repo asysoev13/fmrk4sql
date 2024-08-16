@@ -51,7 +51,7 @@ select foo, bar from bar_table
 </#if>
 ```
 ```java
-final Params params = new FmParams(List.of(new FmParam("union", true)));
+final Params params = new FmParams(new FmParam("union", true));
 ```
 The result of parsing will be
 ```sql
@@ -87,7 +87,7 @@ limit ${size} offset ${page}
 
 ```java
 Params params = new PageParams(
-    new FmParams(List.of(new FmParam("table_name", "orderable_table"))), 
+    new FmParams(new FmParam("table_name", "orderable_table")), 
     new SpringPage(springPagination)
 );
 Query query = new StrQuery(template);

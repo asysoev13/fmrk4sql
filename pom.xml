@@ -36,6 +36,12 @@
             <version>33.0.0-jre</version>
         </dependency>
         <dependency>
+            <groupId>org.cactoos</groupId>
+            <artifactId>cactoos</artifactId>
+            <version>0.55.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.10.2</version>
@@ -63,6 +69,7 @@
                             <exclude>dependencies:org.assertj</exclude>
                             <exclude>dependencies:org.freemarker</exclude>
                             <exclude>dependencies:com.google.guava</exclude>
+                            <exclude>dependencies:org.cactoos.cactoos</exclude>
                         </excludes>
                     </configuration>
                     <executions>

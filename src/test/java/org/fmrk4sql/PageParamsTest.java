@@ -26,9 +26,9 @@
 package org.fmrk4sql;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.cactoos.list.ListOf;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,17 +49,17 @@ final class PageParamsTest {
         final Pageable spring = PageRequest.of(
             0,
             20,
-            Sort.by(List.of(new Sort.Order(Sort.Direction.ASC, "test_col")))
+            Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
         );
         final Params params = this.factory.params("table_name4", "orderable_table");
         final Params actual = new PageParams(params, new SpringPage(spring));
-        final List<Param> expected = List.of(
+        final List<Param> expected = new ListOf(
             new FmParam("table_name4", "orderable_table"),
             new FmParam("page", 0L),
             new FmParam("size", 20),
             new FmParam(
                 "orders",
-                List.of(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
+                new ListOf(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
             )
         );
         Assertions.assertThat(actual.list())
@@ -77,20 +77,21 @@ final class PageParamsTest {
         final Pageable spring = PageRequest.of(
             0,
             20,
-            Sort.by(List.of(new Sort.Order(Sort.Direction.ASC, "test_col")))
+            Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
         );
         final Params params = this.factory.params("table_name5", "orderable_table");
         final Params actual = new PageParams(params, new SpringPage(spring));
-        final Map<String, Object> expected = Map.of(
-            "table_name5",
-            "orderable_table",
-            "page",
-            0L,
-            "size",
-            20,
-            "orders",
-            List.of(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
-        );
-        Assertions.assertThat(actual.map()).isEqualTo(expected);
+        Assertions.assertThat(actual.map())
+            .contains(
+                Assertions.entry("table_name5", "orderable_table"),
+                Assertions.entry("page", 0L),
+                Assertions.entry("size", 20),
+                Assertions.entry(
+                    "orders",
+                    new ListOf(
+                        new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col"))
+                    )
+                )
+            );
     }
 }

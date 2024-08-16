@@ -28,7 +28,6 @@ package org.fmrk4sql;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.fmrk4sql.fake.FakeOrder;
 import org.fmrk4sql.fake.FakePageable;
@@ -132,7 +131,7 @@ final class StrQueryTest {
         final Params fmparams = this.factory.params("table_name2", "orderable_table");
         final Params params = new PageParams(
             fmparams,
-            new FakePageable(0L, 10, List.of(new FakeOrder("col1", "ASC")))
+            new FakePageable(0L, 10, new FakeOrder("col1", "ASC"))
         );
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
@@ -146,7 +145,7 @@ final class StrQueryTest {
         final Pageable spring = PageRequest.of(
             0,
             20,
-            Sort.by(List.of(new Sort.Order(Sort.Direction.ASC, "test_col")))
+            Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
         );
         final String template =  String.join(
             "",
