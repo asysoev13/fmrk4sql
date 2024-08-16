@@ -68,6 +68,7 @@
                             <exclude>dependencies:org.assertj</exclude>
                             <exclude>dependencies:org.freemarker</exclude>
                             <exclude>dependencies:com.google.guava</exclude>
+                            <exclude>dependencies:org.cactoos.cactoos</exclude>
                         </excludes>
                     </configuration>
                     <executions>
