@@ -25,11 +25,14 @@
 
 package org.fmrk4sql;
 
+import com.google.common.collect.ImmutableList;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -51,19 +54,28 @@ public final class FmParams implements Params {
     public static final FmParams EMPTY = new FmParams(Collections.EMPTY_LIST);
 
     /**
-     * Store params for freemarker template parse.
-     */
-    private final List<Param> params;
-
-    /**
      * Wrapper over java object for freemarker parser.
      * Need to initialize one time and multiple use in get method.
      */
-    private final ObjectWrapper wrapper;
+    private static final ObjectWrapper WRAPPER = new DefaultObjectWrapper(
+        freemarker.template.Configuration.VERSION_2_3_32
+    );
 
-    public FmParams(final List<Param> params) {
-        this.params = new ArrayList<>(params);
-        this.wrapper = new DefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_32);
+    /**
+     * Store params for freemarker template parse.
+     */
+    private final Iterable<Param> params;
+
+    public FmParams() {
+        this(new ArrayList<>(0));
+    }
+
+    public FmParams(final Param... params) {
+        this(Arrays.asList(params));
+    }
+
+    public FmParams(final Iterable<Param> params) {
+        this.params = params;
     }
 
     @Override
@@ -71,7 +83,7 @@ public final class FmParams implements Params {
         TemplateModel result = null;
         for (final Param param : this.params) {
             if (name.equals(param.name())) {
-                result = this.wrapper.wrap(param.value());
+                result = FmParams.WRAPPER.wrap(param.value());
                 break;
             }
         }
@@ -80,17 +92,27 @@ public final class FmParams implements Params {
 
     @Override
     public boolean isEmpty() {
-        return this.params.isEmpty();
+        return this.params.iterator().hasNext();
+    }
+
+    @Override
+    public Params with(final Param param) {
+        final Collection<Param> items = new ArrayList<>(this.list().size());
+        for (final Param item : this.params) {
+            items.add(item);
+        }
+        items.add(param);
+        return new FmParams(items);
     }
 
     @Override
     public List<Param> list() {
-        return Collections.unmodifiableList(this.params);
+        return ImmutableList.copyOf(this.params);
     }
 
     @Override
     public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>(this.params.size());
+        final Map<String, Object> result = new HashMap<>();
         for (final Param param : this.params) {
             result.put(param.name(), param.value());
         }

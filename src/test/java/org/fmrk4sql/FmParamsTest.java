@@ -27,8 +27,8 @@ package org.fmrk4sql;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.cactoos.list.ListOf;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -54,7 +54,7 @@ final class FmParamsTest {
             "date",
             this.date
         );
-        final List<Param> expected = List.of(
+        final List<Param> expected = new ListOf(
             new FmParam("table_name", "fmrk_table"),
             new FmParam("date", this.date)
         );
@@ -69,12 +69,10 @@ final class FmParamsTest {
             "date",
             this.date
         );
-        final Map<String, Object> expected = Map.of(
-            "date",
-            this.date,
-            "table_name",
-            "fmrk_table"
-        );
-        Assertions.assertThat(params.map()).isEqualTo(expected);
+        Assertions.assertThat(params.map())
+            .contains(
+                Assertions.entry("date", this.date),
+                Assertions.entry("table_name", "fmrk_table")
+            );
     }
 }

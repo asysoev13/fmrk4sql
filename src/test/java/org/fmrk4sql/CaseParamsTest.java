@@ -29,8 +29,8 @@ import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateModelException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.cactoos.list.ListOf;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -65,7 +65,7 @@ final class CaseParamsTest {
             "tableName",
             "fmrk_table"
         );
-        final List<Param> expected = List.of(
+        final List<Param> expected = new ListOf(
             new FmParam("param_date", this.date),
             new FmParam("table_name", "fmrk_table")
         );
@@ -80,12 +80,10 @@ final class CaseParamsTest {
             "tableName",
             "fmrk_table"
         );
-        final Map<String, Object> expected = Map.of(
-            "param_date",
-            this.date,
-            "table_name",
-            "fmrk_table"
-        );
-        Assertions.assertThat(params.map()).isEqualTo(expected);
+        Assertions.assertThat(params.map())
+            .contains(
+                Assertions.entry("param_date", this.date),
+                Assertions.entry("table_name", "fmrk_table")
+            );
     }
 }

@@ -25,8 +25,6 @@
 
 package org.fmrk4sql;
 
-import java.util.List;
-
 /**
  * Factory for creating FmParams.
  * @since 0.1.0
@@ -36,7 +34,7 @@ import java.util.List;
 final class FmParamsFactory implements ParamsFactory {
     @Override
     public Params params(final String key, final Object val) {
-        return new FmParams(List.of(new FmParam(key, val)));
+        return new FmParams(new FmParam(key, val));
     }
 
     @Override
@@ -44,7 +42,7 @@ final class FmParamsFactory implements ParamsFactory {
         final String key1, final Object val1,
         final String key2, final Object val2
     ) {
-        return new FmParams(List.of(new FmParam(key1, val1), new FmParam(key2, val2)));
+        return new FmParams(new FmParam(key1, val1), new FmParam(key2, val2));
     }
 
     @Override
@@ -54,11 +52,10 @@ final class FmParamsFactory implements ParamsFactory {
         final String key3, final Object val3
     ) {
         return new FmParams(
-            List.of(
-                new FmParam(key1, val1),
-                new FmParam(key2, val2),
-                new FmParam(key3, val3)
-            ));
+            new FmParam(key1, val1),
+            new FmParam(key2, val2),
+            new FmParam(key3, val3)
+        );
     }
 
     @Override
@@ -69,11 +66,10 @@ final class FmParamsFactory implements ParamsFactory {
         final String key4, final Object val4
     ) {
         return new FmParams(
-            List.of(
-                new FmParam(key1, val1),
-                new FmParam(key2, val2),
-                new FmParam(key3, val3),
-                new FmParam(key4, val4)
-            ));
+            new FmParam(key1, val1),
+            new FmParam(key2, val2),
+            new FmParam(key3, val3),
+            new FmParam(key4, val4)
+        );
     }
 }
