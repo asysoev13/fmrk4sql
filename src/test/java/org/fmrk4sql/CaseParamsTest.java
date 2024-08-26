@@ -71,19 +71,4 @@ final class CaseParamsTest {
         );
         Assertions.assertThat(params.list()).isEqualTo(expected);
     }
-
-    @Test
-    void caseParamsToMap() {
-        final Params params = this.factory.params(
-            "paramDate",
-            this.date,
-            "tableName",
-            "fmrk_table"
-        );
-        Assertions.assertThat(params.map())
-            .contains(
-                Assertions.entry("param_date", this.date),
-                Assertions.entry("table_name", "fmrk_table")
-            );
-    }
 }

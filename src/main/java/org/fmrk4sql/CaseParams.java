@@ -31,9 +31,7 @@ import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Decorator at Params with parameter names case formatting.
@@ -104,15 +102,6 @@ public final class CaseParams implements Params {
         final List<Param> result = new ArrayList<>(this.origin.list().size());
         for (final Param param : this.origin.list()) {
             result.add(param.copy(this.input.to(this.output, param.name())));
-        }
-        return result;
-    }
-
-    @Override
-    public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>(this.list().size());
-        for (final Param param : this.list()) {
-            result.put(param.name(), param.value());
         }
         return result;
     }

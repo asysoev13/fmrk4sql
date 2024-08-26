@@ -25,39 +25,21 @@
 
 package org.fmrk4sql;
 
-import java.time.LocalDate;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.cactoos.list.ListOf;
-import org.junit.jupiter.api.Test;
+import java.util.Map;
 
 /**
- * Tests for FmParams class.
+ * Binding parameters in queries.
+ *
+ * Allow to bind parameters returning map of with parameter name and value that satisfies
+ * requirements of query.
  * @since 0.1.0
  */
-final class FmParamsTest {
+public interface Bindable {
     /**
-     * Params factory.
+     * Return map of parameters.
+     * Where key is name of param and value is param's value
+     *
+     * @return Map of parameters
      */
-    private final ParamsFactory factory = new FmParamsFactory();
-
-    /**
-     * Date for tests.
-     */
-    private final LocalDate date = LocalDate.of(2024, 01, 01);
-
-    @Test
-    void fmParamsToList() {
-        final Params params = this.factory.params(
-            "table_name",
-            "fmrk_table",
-            "date",
-            this.date
-        );
-        final List<Param> expected = new ListOf(
-            new FmParam("table_name", "fmrk_table"),
-            new FmParam("date", this.date)
-        );
-        Assertions.assertThat(params.list()).isEqualTo(expected);
-    }
+    Map<String, Object> map();
 }

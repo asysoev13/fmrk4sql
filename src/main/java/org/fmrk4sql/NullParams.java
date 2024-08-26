@@ -31,7 +31,6 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Null params for cases when freemarker template without params.
@@ -62,8 +61,4 @@ public final class NullParams implements Params {
         return Collections.emptyList();
     }
 
-    @Override
-    public Map<String, Object> map() {
-        return Collections.emptyMap();
-    }
 }

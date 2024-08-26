@@ -71,27 +71,4 @@ final class PageParamsTest {
                 ).collect(Collectors.toList())
             );
     }
-
-    @Test
-    void pageParamsToMap() {
-        final Pageable spring = PageRequest.of(
-            0,
-            20,
-            Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
-        );
-        final Params params = this.factory.params("table_name5", "orderable_table");
-        final Params actual = new PageParams(params, new SpringPage(spring));
-        Assertions.assertThat(actual.map())
-            .contains(
-                Assertions.entry("table_name5", "orderable_table"),
-                Assertions.entry("page", 0L),
-                Assertions.entry("size", 20),
-                Assertions.entry(
-                    "orders",
-                    new ListOf(
-                        new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col"))
-                    )
-                )
-            );
-    }
 }

@@ -26,6 +26,7 @@
 package org.fmrk4sql;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Freemarker template parameter.
@@ -34,6 +35,7 @@ import lombok.EqualsAndHashCode;
  * @since 0.1.0
  */
 @EqualsAndHashCode
+@ToString
 public final class FmParam<P> implements Param {
     /**
      * Parameter name.
@@ -69,10 +71,5 @@ public final class FmParam<P> implements Param {
             result = new FmParam(name, this.pval);
         }
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return this.value().toString();
     }
 }

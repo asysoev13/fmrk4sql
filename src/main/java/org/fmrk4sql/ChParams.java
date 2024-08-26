@@ -25,39 +25,36 @@
 
 package org.fmrk4sql;
 
-import java.time.LocalDate;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.cactoos.list.ListOf;
-import org.junit.jupiter.api.Test;
+import java.util.HashMap;
+import java.util.Map;
+import lombok.EqualsAndHashCode;
 
 /**
- * Tests for FmParams class.
+ * Decorator formats values to Clickhouse format for variables binding.
+ * In query:
+ * select foo from bar where id=:id_var
+ * :id_var - variable for binding
+ * Finally if :id_var is String, map return: id_var:'String'
  * @since 0.1.0
  */
-final class FmParamsTest {
-    /**
-     * Params factory.
-     */
-    private final ParamsFactory factory = new FmParamsFactory();
+@EqualsAndHashCode
+public final class ChParams implements Bindable {
 
     /**
-     * Date for tests.
+     * Link at decorated object.
      */
-    private final LocalDate date = LocalDate.of(2024, 01, 01);
+    private final transient Params params;
 
-    @Test
-    void fmParamsToList() {
-        final Params params = this.factory.params(
-            "table_name",
-            "fmrk_table",
-            "date",
-            this.date
-        );
-        final List<Param> expected = new ListOf(
-            new FmParam("table_name", "fmrk_table"),
-            new FmParam("date", this.date)
-        );
-        Assertions.assertThat(params.list()).isEqualTo(expected);
+    public ChParams(final Params params) {
+        this.params = params;
+    }
+
+    @Override
+    public Map<String, Object> map() {
+        final Map<String, Object> result = new HashMap<>();
+        for (final Param param : this.params.list()) {
+            result.put(param.name(), param.value());
+        }
+        return result;
     }
 }

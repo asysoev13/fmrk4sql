@@ -34,9 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -110,12 +108,4 @@ public final class FmParams implements Params {
         return ImmutableList.copyOf(this.params);
     }
 
-    @Override
-    public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>();
-        for (final Param param : this.params) {
-            result.put(param.name(), param.value());
-        }
-        return result;
-    }
 }
