@@ -25,23 +25,13 @@
 
 package org.fmrk4sql;
 
-import java.util.Map;
-
 /**
- * Binding parameters in queries.
- *
- * Allow to bind parameters returning map of with parameter name and value that satisfies
- * requirements of query.
+ * Convertor of params when need bind parameters in queries.
+ * Bind params generates with map() methods in extensions of databases
+ * @param <T> - param type that should be converted
+ * @param <P> - type that should be converted to
  * @since 0.1.0
  */
-public interface Bindable {
-    /**
-     * Return map of parameters.
-     * Where key is name of param and value is param's value
-     *
-     * @return Map of parameters
-     */
-    Map<String, Object> map();
-
-    Bindable with(Class<?> clazz, ParamConverter converter);
+public interface ParamConverter<T, P> {
+    P convert(Param<T> object);
 }

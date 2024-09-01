@@ -23,38 +23,19 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.ch;
 
-import java.util.HashMap;
-import java.util.Map;
-import lombok.EqualsAndHashCode;
+import java.time.LocalDateTime;
+import org.fmrk4sql.Param;
+import org.fmrk4sql.ParamConverter;
 
 /**
- * Decorator formats values to Clickhouse format for variables binding.
- * In query:
- * select foo from bar where id=:id_var
- * :id_var - variable for binding
- * Finally if :id_var is String, map return: id_var:'String'
+ * Converts LocalDateTime param to String for binding in clickhouse queries.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-public final class ChParams implements Bindable {
-
-    /**
-     * Link at decorated object.
-     */
-    private final transient Params params;
-
-    public ChParams(final Params params) {
-        this.params = params;
-    }
-
+public final class LdtConverter implements ParamConverter<LocalDateTime, String> {
     @Override
-    public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>();
-        for (final Param param : this.params.list()) {
-            result.put(param.name(), param.value());
-        }
-        return result;
+    public String convert(final Param<LocalDateTime> param) {
+        return String.join("", "'", param.value().toString(), "'");
     }
 }

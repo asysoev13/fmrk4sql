@@ -29,6 +29,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
+import org.fmrk4sql.ch.ChParams;
+import org.fmrk4sql.params.IntParam;
+import org.fmrk4sql.params.LdParam;
+import org.fmrk4sql.params.LdtParam;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,8 +61,9 @@ final class ChParamsTest {
 
     @Test
     void convertDateParamsToMap() {
-        final Params params = this.factory.params(
-            "date", this.date, "datetime", this.datetime
+        final Params params = new FmParams(
+            new LdParam("date", this.date),
+            new LdtParam("datetime", this.datetime)
         );
         final Bindable chparams = new ChParams(params);
         Assertions
@@ -66,6 +71,23 @@ final class ChParamsTest {
             .contains(
                 Assertions.entry("date", "'2024-01-01'"),
                 Assertions.entry("datetime", "'2024-01-01T10:11:12'")
+            );
+    }
+
+    @Test
+    void convertIntParamsToMap() {
+        final Params params = new FmParams(
+            new IntParam("intvalue1", 13),
+            new FmParam("fmvalue1", "value"),
+            new FmParam("strvalue1", "'value'")
+        );
+        final Bindable chparams = new ChParams(params);
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("intvalue1", 13),
+                Assertions.entry("fmvalue1", "value"),
+                Assertions.entry("strvalue1", "'value'")
             );
     }
 

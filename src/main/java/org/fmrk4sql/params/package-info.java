@@ -23,25 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
-
-import java.util.Map;
-
 /**
- * Binding parameters in queries.
+ * Extension FmParam with other standart types.
  *
- * Allow to bind parameters returning map of with parameter name and value that satisfies
- * requirements of query.
  * @since 0.1.0
  */
-public interface Bindable {
-    /**
-     * Return map of parameters.
-     * Where key is name of param and value is param's value
-     *
-     * @return Map of parameters
-     */
-    Map<String, Object> map();
-
-    Bindable with(Class<?> clazz, ParamConverter converter);
-}
+package org.fmrk4sql.params;

@@ -23,25 +23,18 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.ch;
 
-import java.util.Map;
+import org.fmrk4sql.Param;
+import org.fmrk4sql.ParamConverter;
 
 /**
- * Binding parameters in queries.
- *
- * Allow to bind parameters returning map of with parameter name and value that satisfies
- * requirements of query.
+ * Converts Object param to Object for binding in clickhouse queries.
  * @since 0.1.0
  */
-public interface Bindable {
-    /**
-     * Return map of parameters.
-     * Where key is name of param and value is param's value
-     *
-     * @return Map of parameters
-     */
-    Map<String, Object> map();
-
-    Bindable with(Class<?> clazz, ParamConverter converter);
+public final class FmConverter implements ParamConverter<Object, Object> {
+    @Override
+    public Object convert(final Param<Object> param) {
+        return  param.value();
+    }
 }
