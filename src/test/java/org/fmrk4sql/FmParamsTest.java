@@ -60,19 +60,4 @@ final class FmParamsTest {
         );
         Assertions.assertThat(params.list()).isEqualTo(expected);
     }
-
-    @Test
-    void fmParamsToMap() {
-        final Params params = this.factory.params(
-            "table_name",
-            "fmrk_table",
-            "date",
-            this.date
-        );
-        Assertions.assertThat(params.map())
-            .contains(
-                Assertions.entry("date", this.date),
-                Assertions.entry("table_name", "fmrk_table")
-            );
-    }
 }

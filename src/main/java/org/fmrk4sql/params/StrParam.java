@@ -23,58 +23,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.params;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import org.fmrk4sql.FmParam;
 
 /**
  * Freemarker template parameter.
  * Contains name and value of parameter
- * @param <P> - Type of parameter
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public class FmParam<P> implements Param {
-    /**
-     * Parameter name.
-     */
-    private final String pname;
+public final class StrParam extends FmParam<String> {
 
-    /**
-     * Parameter value.
-     */
-    private final P pval;
-
-    public FmParam(final String name, final P val) {
-        this.pname = name;
-        this.pval = val;
+    public StrParam(final String name, final String val) {
+        super(name, val);
     }
 
-    /**
-     * Freemarker template parameter name.
-     * @return Parameter name
-     */
-    public String name() {
-        return this.pname;
-    }
-
-    /**
-     * Freemarker template parameter value.
-     * @return Parameter value
-     */
-    public P value() {
-        return this.pval;
-    }
-
-    /**
-     * Return copy of object with changed name.
-     * @param name New name of new parameter
-     * @return Parameter copy
-     */
-    public Param rename(@NonNull final String name) {
-        return new FmParam(name, this.pval);
+    public StrParam rename(@NonNull final String name) {
+        return new StrParam(name, this.value());
     }
 }

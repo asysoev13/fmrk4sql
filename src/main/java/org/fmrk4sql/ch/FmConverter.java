@@ -23,58 +23,18 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.ch;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import org.fmrk4sql.Param;
+import org.fmrk4sql.ParamConverter;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
- * @param <P> - Type of parameter
+ * Converts Object param to Object for binding in clickhouse queries.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public class FmParam<P> implements Param {
-    /**
-     * Parameter name.
-     */
-    private final String pname;
-
-    /**
-     * Parameter value.
-     */
-    private final P pval;
-
-    public FmParam(final String name, final P val) {
-        this.pname = name;
-        this.pval = val;
-    }
-
-    /**
-     * Freemarker template parameter name.
-     * @return Parameter name
-     */
-    public String name() {
-        return this.pname;
-    }
-
-    /**
-     * Freemarker template parameter value.
-     * @return Parameter value
-     */
-    public P value() {
-        return this.pval;
-    }
-
-    /**
-     * Return copy of object with changed name.
-     * @param name New name of new parameter
-     * @return Parameter copy
-     */
-    public Param rename(@NonNull final String name) {
-        return new FmParam(name, this.pval);
+public final class FmConverter implements ParamConverter<Object, Object> {
+    @Override
+    public Object convert(final Param<Object> param) {
+        return  param.value();
     }
 }

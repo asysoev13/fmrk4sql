@@ -25,56 +25,13 @@
 
 package org.fmrk4sql;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
- * @param <P> - Type of parameter
+ * Convertor of params when need bind parameters in queries.
+ * Bind params generates with map() methods in extensions of databases
+ * @param <T> - param type that should be converted
+ * @param <P> - type that should be converted to
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public class FmParam<P> implements Param {
-    /**
-     * Parameter name.
-     */
-    private final String pname;
-
-    /**
-     * Parameter value.
-     */
-    private final P pval;
-
-    public FmParam(final String name, final P val) {
-        this.pname = name;
-        this.pval = val;
-    }
-
-    /**
-     * Freemarker template parameter name.
-     * @return Parameter name
-     */
-    public String name() {
-        return this.pname;
-    }
-
-    /**
-     * Freemarker template parameter value.
-     * @return Parameter value
-     */
-    public P value() {
-        return this.pval;
-    }
-
-    /**
-     * Return copy of object with changed name.
-     * @param name New name of new parameter
-     * @return Parameter copy
-     */
-    public Param rename(@NonNull final String name) {
-        return new FmParam(name, this.pval);
-    }
+public interface ParamConverter<T, P> {
+    P convert(Param<T> object);
 }

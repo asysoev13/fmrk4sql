@@ -31,9 +31,7 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Decorator at Params with pageable functionality.
@@ -108,14 +106,5 @@ public final class PageParams implements Params {
             this.params.add(new FmParam("orders", this.pageable.orders()));
         }
         return Collections.unmodifiableList(this.params);
-    }
-
-    @Override
-    public Map<String, Object> map() {
-        final Map<String, Object> result = new HashMap<>(this.list().size());
-        for (final Param param : this.list()) {
-            result.put(param.name(), param.value());
-        }
-        return result;
     }
 }

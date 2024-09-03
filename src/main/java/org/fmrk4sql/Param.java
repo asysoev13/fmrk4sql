@@ -47,10 +47,8 @@ public interface Param<P> {
 
     /**
      * Return copy of object with changed name.
-     * If name is "", should return copy of object without
-     * changing name
      * @param name New name of new parameter
      * @return Parameter copy
      */
-    Param copy(String name);
+    Param rename(String name);
 }
