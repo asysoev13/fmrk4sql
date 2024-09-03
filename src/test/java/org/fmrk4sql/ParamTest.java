@@ -34,16 +34,19 @@ import org.junit.jupiter.api.Test;
  */
 final class ParamTest {
     @Test
-    void fmParamCopyNullName() {
+    void fmParamRenameWithNull() {
         final Param param = new FmParam("table_name", "fmrk_table");
-        final Param expected = new FmParam("table_name", "fmrk_table");
+        final NullPointerException exception = Assertions.catchThrowableOfType(
+            () -> param.rename(null), NullPointerException.class
+        );
         Assertions
-            .assertThat(param.rename(null))
-            .isEqualTo(expected);
+            .assertThat(exception)
+            .isInstanceOf(NullPointerException.class)
+            .hasMessage("name is marked non-null but is null");
     }
 
     @Test
-    void fmParamCopy() {
+    void fmParamRename() {
         final Param param = new FmParam("table_name", "fmrk_table");
         final Param expected = new FmParam("new_name", "fmrk_table");
         Assertions
