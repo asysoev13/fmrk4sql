@@ -26,6 +26,7 @@
 package org.fmrk4sql.params;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import org.fmrk4sql.FmParam;
 
@@ -40,5 +41,9 @@ public final class StrParam extends FmParam<String> {
 
     public StrParam(final String name, final String val) {
         super(name, val);
+    }
+
+    public StrParam rename(@NonNull final String name) {
+        return new StrParam(name, this.value());
     }
 }

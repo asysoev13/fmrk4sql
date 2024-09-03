@@ -25,7 +25,7 @@
 
 package org.fmrk4sql.params;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -38,12 +38,12 @@ import org.fmrk4sql.FmParam;
  */
 @EqualsAndHashCode
 @ToString
-public final class LdParam extends FmParam<LocalDate> {
-    public LdParam(final String name, final LocalDate val) {
+public final class JsqlParam extends FmParam<Date> {
+    public JsqlParam(final String name, final Date val) {
         super(name, val);
     }
 
-    public LdParam rename(@NonNull final String name) {
-        return new LdParam(name, this.value());
+    public JsqlParam rename(@NonNull final String name) {
+        return new JsqlParam(name, this.value());
     }
 }

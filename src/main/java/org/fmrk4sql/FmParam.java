@@ -26,6 +26,7 @@
 package org.fmrk4sql;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -70,17 +71,10 @@ public class FmParam<P> implements Param {
 
     /**
      * Return copy of object with changed name.
-     * If name is "", should return copy of object with original name
      * @param name New name of new parameter
      * @return Parameter copy
      */
-    public Param copy(final String name) {
-        final Param result;
-        if (name == null || "".equals(name)) {
-            result = new FmParam(this.pname, this.pval);
-        } else {
-            result = new FmParam(name, this.pval);
-        }
-        return result;
+    public Param rename(@NonNull final String name) {
+        return new FmParam(name, this.pval);
     }
 }

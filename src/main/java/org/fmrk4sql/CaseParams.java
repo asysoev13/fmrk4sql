@@ -100,8 +100,9 @@ public final class CaseParams implements Params {
     @Override
     public List<Param> list() {
         final List<Param> result = new ArrayList<>(this.origin.list().size());
+        new CaseParams(this.origin, this.input, this.output);
         for (final Param param : this.origin.list()) {
-            result.add(param.copy(this.input.to(this.output, param.name())));
+            result.add(param.rename(this.input.to(this.output, param.name())));
         }
         return result;
     }

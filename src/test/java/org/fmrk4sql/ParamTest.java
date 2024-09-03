@@ -38,7 +38,7 @@ final class ParamTest {
         final Param param = new FmParam("table_name", "fmrk_table");
         final Param expected = new FmParam("table_name", "fmrk_table");
         Assertions
-            .assertThat(param.copy(null))
+            .assertThat(param.rename(null))
             .isEqualTo(expected);
     }
 
@@ -47,7 +47,7 @@ final class ParamTest {
         final Param param = new FmParam("table_name", "fmrk_table");
         final Param expected = new FmParam("new_name", "fmrk_table");
         Assertions
-            .assertThat(param.copy("new_name"))
+            .assertThat(param.rename("new_name"))
             .isEqualTo(expected);
     }
 }

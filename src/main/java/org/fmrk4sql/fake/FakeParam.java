@@ -63,7 +63,7 @@ public final class FakeParam<P> implements Param {
     }
 
     @Override
-    public Param copy(final String name) {
+    public Param rename(final String name) {
         final Param result;
         if ("".equals(name)) {
             result = new FmParam(this.pname, this.pval);

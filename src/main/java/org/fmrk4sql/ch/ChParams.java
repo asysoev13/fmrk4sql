@@ -36,6 +36,8 @@ import org.fmrk4sql.Param;
 import org.fmrk4sql.ParamConverter;
 import org.fmrk4sql.Params;
 import org.fmrk4sql.params.IntParam;
+import org.fmrk4sql.params.JdParam;
+import org.fmrk4sql.params.JsqlParam;
 import org.fmrk4sql.params.LdParam;
 import org.fmrk4sql.params.LdtParam;
 import org.fmrk4sql.params.StrParam;
@@ -59,6 +61,8 @@ public final class ChParams implements Bindable {
             new MapEntry<>(StrParam.class, new StrConverter()),
             new MapEntry<>(LdParam.class, new LdConverter()),
             new MapEntry<>(LdtParam.class, new LdtConverter()),
+            new MapEntry<>(JdParam.class, new JdConverter()),
+            new MapEntry<>(JsqlParam.class, new JsqlConverter()),
             new MapEntry<>(IntParam.class, new IntConverter())
         );
 

@@ -26,8 +26,10 @@
 package org.fmrk4sql.params;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import org.fmrk4sql.FmParam;
+import org.fmrk4sql.Param;
 
 /**
  * Freemarker template parameter.
@@ -39,5 +41,9 @@ import org.fmrk4sql.FmParam;
 public final class IntParam extends FmParam<Integer> {
     public IntParam(final String name, final Integer val) {
         super(name, val);
+    }
+
+    public Param rename(@NonNull final String name) {
+        return new IntParam(name, this.value());
     }
 }

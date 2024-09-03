@@ -25,12 +25,18 @@
 
 package org.fmrk4sql;
 
+import com.google.common.base.CaseFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
 import org.fmrk4sql.ch.ChParams;
 import org.fmrk4sql.params.IntParam;
+import org.fmrk4sql.params.JdParam;
+import org.fmrk4sql.params.JsqlParam;
 import org.fmrk4sql.params.LdParam;
 import org.fmrk4sql.params.LdtParam;
 import org.junit.jupiter.api.Test;
@@ -43,12 +49,6 @@ import org.springframework.data.domain.Sort;
  * @since 0.1.0
  */
 final class ChParamsTest {
-
-    /**
-     * Params factory.
-     */
-    private final ParamsFactory factory = new FmParamsFactory();
-
     /**
      * Date for tests.
      */
@@ -60,17 +60,26 @@ final class ChParamsTest {
     private final LocalDateTime datetime = LocalDateTime.of(2024, 1, 1, 10, 11, 12);
 
     @Test
-    void convertDateParamsToMap() {
+    void convertDateParamsToMap() throws ParseException {
+        final java.util.Date judate = new SimpleDateFormat(
+            "yyyy-MM-dd'T'hh:mm:ss",
+            Locale.getDefault()
+        ).parse("2024-01-01T10:11:12");
+        final java.sql.Date jsqldate = new java.sql.Date(judate.getTime());
         final Params params = new FmParams(
             new LdParam("date", this.date),
-            new LdtParam("datetime", this.datetime)
+            new LdtParam("datetime", this.datetime),
+            new JdParam("judate", judate),
+            new JsqlParam("jsqldate", jsqldate)
         );
         final Bindable chparams = new ChParams(params);
         Assertions
             .assertThat(chparams.map())
             .contains(
                 Assertions.entry("date", "'2024-01-01'"),
-                Assertions.entry("datetime", "'2024-01-01T10:11:12'")
+                Assertions.entry("datetime", "'2024-01-01T10:11:12'"),
+                Assertions.entry("judate", "'2024-01-01T10:11:12'"),
+                Assertions.entry("jsqldate", "'2024-01-01T10:11:12'")
             );
     }
 
@@ -93,17 +102,18 @@ final class ChParamsTest {
 
     @Test
     void caseParamsToMap() {
-        final Params params = this.factory.params(
-            "paramDate",
-            this.date,
-            "tableName",
-            "fmrk_table"
+        final Params params = new CaseParams(
+            new FmParams(
+                new LdParam("paramDate", this.date),
+                new FmParam("tableName", "fmrk_table")
+            ),
+            CaseFormat.LOWER_CAMEL, CaseFormat.LOWER_UNDERSCORE
         );
         final Bindable chparams = new ChParams(params);
         Assertions.assertThat(chparams.map())
             .contains(
-                Assertions.entry("paramDate", this.date),
-                Assertions.entry("tableName", "fmrk_table")
+                Assertions.entry("param_date", "'2024-01-01'"),
+                Assertions.entry("table_name", "fmrk_table")
             );
     }
 
@@ -114,7 +124,7 @@ final class ChParamsTest {
             20,
             Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
         );
-        final Params params = this.factory.params("table_name5", "orderable_table");
+        final Params params = new FmParams(new FmParam("table_name5", "orderable_table"));
         final Params pageparams = new PageParams(params, new SpringPage(spring));
         final Bindable chparams = new ChParams(pageparams);
         Assertions.assertThat(chparams.map())

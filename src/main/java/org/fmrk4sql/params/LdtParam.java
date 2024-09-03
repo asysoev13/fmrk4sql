@@ -27,6 +27,7 @@ package org.fmrk4sql.params;
 
 import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import org.fmrk4sql.FmParam;
 
@@ -40,5 +41,9 @@ import org.fmrk4sql.FmParam;
 public final class LdtParam extends FmParam<LocalDateTime> {
     public LdtParam(final String name, final LocalDateTime val) {
         super(name, val);
+    }
+
+    public LdtParam rename(@NonNull final String name) {
+        return new LdtParam(name, this.value());
     }
 }
