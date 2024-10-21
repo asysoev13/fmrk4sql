@@ -74,4 +74,49 @@ final class PageParamsTest {
                 ).collect(Collectors.toList())
             );
     }
+
+    @Test
+    void pageParamsUnordered() {
+        final Pageable spring = PageRequest.of(
+            0,
+            20,
+            Sort.unsorted()
+        );
+        final Params params = new FmParams(
+            new FmParam("table_name5", new StrVal("noorderable_table"))
+        );
+        final Params actual = new PageParams(params, new SpringPage(spring));
+        final List<Param> expected = new ListOf(
+            new FmParam("table_name5", "noorderable_table"),
+            new FmParam("page", new LongVal(0L)),
+            new FmParam("size", new IntVal(20)),
+            new FmParam(
+                "orders",
+                Orderable.NO_ORDER
+            )
+        );
+        Assertions.assertThat(actual.list())
+            .hasSize(expected.size())
+            .extracting(Param::name, Param::value)
+            .containsExactlyElementsOf(
+                expected.stream().map(
+                    p -> Assertions.tuple(p.name(), p.value())
+                ).collect(Collectors.toList())
+            );
+    }
+
+    @Test
+    void pageParamsUnpaged() {
+        final Params params = new FmParams(
+            new FmParam("table_name6", new StrVal("unpaged_table"))
+        );
+        final Params actual = new PageParams(params, new SpringPage(Pageable.unpaged()));
+        final IllegalArgumentException exception = Assertions.catchThrowableOfType(
+            () -> actual.list(), IllegalArgumentException.class
+        );
+        Assertions
+            .assertThat(exception)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Pageable is not defined by Spring in pageable argument");
+    }
 }

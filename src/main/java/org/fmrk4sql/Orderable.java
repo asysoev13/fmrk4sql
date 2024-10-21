@@ -25,12 +25,20 @@
 
 package org.fmrk4sql;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Interface that allow easy support pagination and ordering.
  *
  * @since 0.1.0
  */
 public interface Orderable {
+
+    /**
+     * Empty order.
+     */
+    List NO_ORDER = Collections.EMPTY_LIST;
 
     /**
      * Column order name.
