@@ -143,6 +143,33 @@ final class StrQueryTest {
     }
 
     @Test
+    void parsePageableNullOrderableNull() throws TemplateException, IOException {
+        final String template = String.join(
+            "",
+            "select col1, col2 from ${table_name2} ",
+            "<#if orders?has_content> ",
+            "order by ",
+            "<#list orders as ord>",
+            "${ord.col()} ${ord.direction()} ",
+            "</#list>",
+            "</#if>",
+            "limit ${size}  offset ${page}"
+        );
+        final Params fmparams = new FmParams(
+            new FmParam("table_name2", new StrVal("orderable_table"))
+        );
+        final Params params = new PageParams(
+            fmparams,
+            new FakePageable(0L, 10, Orderable.NO_ORDER)
+        );
+        final Query query = new StrQuery(template);
+        Assertions.assertThat(query.parse(params))
+            .isEqualTo(
+                "select col1, col2 from orderable_table limit 10  offset 0"
+            );
+    }
+
+    @Test
     void parseSpringPageable() throws TemplateException, IOException {
         final Pageable spring = PageRequest.of(
             0,
