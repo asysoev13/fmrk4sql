@@ -31,6 +31,8 @@ import java.time.LocalDate;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
+import org.fmrk4sql.val.LdVal;
+import org.fmrk4sql.val.StrVal;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,27 +45,27 @@ final class CaseParamsTest {
      */
     private final LocalDate date = LocalDate.of(2024, 01, 01);
 
-    /**
-     * Params factory.
-     */
-    private final ParamsFactory factory = new CaseParamsFactory(
-        CaseFormat.LOWER_CAMEL,
-        CaseFormat.LOWER_UNDERSCORE
-    );
-
     @Test
     void fromLowerCamelTest() throws TemplateModelException {
-        final Params params = this.factory.params("fooBar", "value");
+        final Params params = new CaseParams(
+            new FmParams(
+                new FmParam("fooBar", new StrVal("value"))
+            ),
+            CaseFormat.LOWER_CAMEL,
+            CaseFormat.LOWER_UNDERSCORE
+        );
         Assertions.assertThat(params.get("foo_bar").toString()).isEqualTo("value");
     }
 
     @Test
     void caseParamsToList() {
-        final Params params =  this.factory.params(
-            "paramDate",
-            this.date,
-            "tableName",
-            "fmrk_table"
+        final Params params = new CaseParams(
+            new FmParams(
+                new FmParam("paramDate", new LdVal(this.date)),
+                new FmParam("tableName", "fmrk_table")
+            ),
+            CaseFormat.LOWER_CAMEL,
+            CaseFormat.LOWER_UNDERSCORE
         );
         final List<Param> expected = new ListOf(
             new FmParam("param_date", this.date),

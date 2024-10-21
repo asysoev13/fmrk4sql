@@ -46,7 +46,7 @@ import java.util.List;
 public final class CaseParams implements Params {
 
     /**
-     * Link at decorated object.
+     * Link to decorated object.
      */
     private final transient Params origin;
 
@@ -77,10 +77,15 @@ public final class CaseParams implements Params {
 
     @Override
     public TemplateModel get(final String name) throws TemplateModelException {
-        TemplateModel result = null;
+        return this.wrapper.wrap(this.param(name).value().val());
+    }
+
+    @Override
+    public Param param(final String name) {
+        Param result = null;
         for (final Param param : this.origin.list()) {
             if (name.equals(this.input.to(this.output, param.name()))) {
-                result = this.wrapper.wrap(param.value());
+                result = param;
                 break;
             }
         }
@@ -100,7 +105,6 @@ public final class CaseParams implements Params {
     @Override
     public List<Param> list() {
         final List<Param> result = new ArrayList<>(this.origin.list().size());
-        new CaseParams(this.origin, this.input, this.output);
         for (final Param param : this.origin.list()) {
             result.add(param.rename(this.input.to(this.output, param.name())));
         }

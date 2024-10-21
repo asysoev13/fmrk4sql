@@ -23,27 +23,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.params;
+package org.fmrk4sql.val;
 
+import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
-import org.fmrk4sql.FmParam;
-import org.fmrk4sql.Param;
+import org.fmrk4sql.Value;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
+ * Fmrk4sql LocalDateTime value for queries.
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public final class IntParam extends FmParam<Integer> {
-    public IntParam(final String name, final Integer val) {
-        super(name, val);
+public final class LdtVal implements Value<LocalDateTime, LocalDateTime> {
+
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final LocalDateTime value;
+
+    public LdtVal(final LocalDateTime value) {
+        this.value = value;
     }
 
-    public Param rename(@NonNull final String name) {
-        return new IntParam(name, this.value());
+    @Override
+    public LocalDateTime val() {
+        return this.value;
+    }
+
+    @Override
+    public LocalDateTime convert() {
+        return this.value;
     }
 }

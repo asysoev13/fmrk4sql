@@ -47,7 +47,7 @@ public final class NullParams implements Params {
     }
 
     @Override
-    public boolean isEmpty() throws TemplateModelException {
+    public boolean isEmpty() {
         return true;
     }
 
@@ -59,6 +59,11 @@ public final class NullParams implements Params {
     @Override
     public List<Param> list() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Param param(final String name) {
+        return null;
     }
 
 }

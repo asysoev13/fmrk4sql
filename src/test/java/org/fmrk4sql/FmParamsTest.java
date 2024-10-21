@@ -29,6 +29,8 @@ import java.time.LocalDate;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
+import org.fmrk4sql.val.LdVal;
+import org.fmrk4sql.val.StrVal;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -37,26 +39,19 @@ import org.junit.jupiter.api.Test;
  */
 final class FmParamsTest {
     /**
-     * Params factory.
-     */
-    private final ParamsFactory factory = new FmParamsFactory();
-
-    /**
      * Date for tests.
      */
     private final LocalDate date = LocalDate.of(2024, 01, 01);
 
     @Test
     void fmParamsToList() {
-        final Params params = this.factory.params(
-            "table_name",
-            "fmrk_table",
-            "date",
-            this.date
+        final Params params = new FmParams(
+            new FmParam("table_name", new StrVal("fmrk_table")),
+            new FmParam("date", new LdVal(this.date))
         );
         final List<Param> expected = new ListOf(
-            new FmParam("table_name", "fmrk_table"),
-            new FmParam("date", this.date)
+            new FmParam("table_name", new StrVal("fmrk_table")),
+            new FmParam("date", new LdVal(this.date))
         );
         Assertions.assertThat(params.list()).isEqualTo(expected);
     }

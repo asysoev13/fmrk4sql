@@ -23,27 +23,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.params;
+package org.fmrk4sql.ch;
 
-import java.util.Date;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import org.fmrk4sql.FmParam;
+import java.time.LocalDate;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.LdVal;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
+ * Clickhouse LocalDate value for queries.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public final class JdParam extends FmParam<Date> {
-    public JdParam(final String name, final Date val) {
-        super(name, val);
+public final class ChLd implements Value<LocalDate, String> {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<LocalDate, String> origin;
+
+    public ChLd(final LocalDate val) {
+        this(new LdVal(val));
     }
 
-    public JdParam rename(@NonNull final String name) {
-        return new JdParam(name, this.value());
+    public ChLd(final Value origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public LocalDate val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public String convert() {
+        return String.join("", "'", this.origin.val().toString(), "'");
     }
 }

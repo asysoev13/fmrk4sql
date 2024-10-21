@@ -25,23 +25,35 @@
 
 package org.fmrk4sql.ch;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.DblVal;
 
 /**
- * Converts LocalDate param to String for binding in clickhouse queries.
+ * Clickhouse double value for queries.
  * @since 0.1.0
  */
-public final class JdConverter implements ParamConverter<Date, String> {
+public final class ChDbl implements Value<Double, Double> {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<Double, Double> origin;
+
+    public ChDbl(final Double val) {
+        this(new DblVal(val));
+    }
+
+    public ChDbl(final Value origin) {
+        this.origin = origin;
+    }
+
     @Override
-    public String convert(final Param<Date> param) {
-        final SimpleDateFormat format = new SimpleDateFormat(
-            "yyyy-MM-dd'T'hh:mm:ss",
-            Locale.getDefault()
-        );
-        return String.join("", "'", format.format(param.value()), "'");
+    public Double val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public Double convert() {
+        return this.origin.val();
     }
 }

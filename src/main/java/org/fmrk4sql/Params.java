@@ -48,4 +48,12 @@ public interface Params extends TemplateHashModel {
      * @return New params list
      */
     Collection<Param> list();
+
+    /**
+     * Return parameter by name.
+     *
+     * @param name Name of parameter in list
+     * @return Single param value
+     */
+    Param param(String name);
 }

@@ -78,10 +78,15 @@ public final class FmParams implements Params {
 
     @Override
     public TemplateModel get(final String name) throws TemplateModelException {
-        TemplateModel result = null;
+        return FmParams.WRAPPER.wrap(this.param(name).value().val());
+    }
+
+    @Override
+    public Param param(final String name) {
+        Param result = null;
         for (final Param param : this.params) {
             if (name.equals(param.name())) {
-                result = FmParams.WRAPPER.wrap(param.value());
+                result = param;
                 break;
             }
         }
@@ -107,5 +112,4 @@ public final class FmParams implements Params {
     public List<Param> list() {
         return ImmutableList.copyOf(this.params);
     }
-
 }

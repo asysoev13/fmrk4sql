@@ -28,19 +28,9 @@ package org.fmrk4sql.ch;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
-import org.cactoos.map.MapEntry;
-import org.cactoos.map.MapOf;
 import org.fmrk4sql.Bindable;
-import org.fmrk4sql.FmParam;
 import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
 import org.fmrk4sql.Params;
-import org.fmrk4sql.params.IntParam;
-import org.fmrk4sql.params.JdParam;
-import org.fmrk4sql.params.JsqlParam;
-import org.fmrk4sql.params.LdParam;
-import org.fmrk4sql.params.LdtParam;
-import org.fmrk4sql.params.StrParam;
 
 /**
  * Decorator formats values to Clickhouse format for variables binding.
@@ -52,51 +42,21 @@ import org.fmrk4sql.params.StrParam;
  */
 @EqualsAndHashCode
 public final class ChParams implements Bindable {
-    /**
-     * Convertors map for params to bind in clickhouse queries.
-     */
-    private static final Map<Class<?>, ParamConverter> CONVERTERS =
-        new MapOf(
-            new MapEntry<>(FmParam.class, new FmConverter()),
-            new MapEntry<>(StrParam.class, new StrConverter()),
-            new MapEntry<>(LdParam.class, new LdConverter()),
-            new MapEntry<>(LdtParam.class, new LdtConverter()),
-            new MapEntry<>(JdParam.class, new JdConverter()),
-            new MapEntry<>(JsqlParam.class, new JsqlConverter()),
-            new MapEntry<>(IntParam.class, new IntConverter())
-        );
 
     /**
-     * Link at decorated object.
+     * Link to decorated object.
      */
     private final transient Params params;
 
-    /**
-     * Map of param convertors.
-     */
-    private Map<Class<?>, ParamConverter> cvts;
-
     public ChParams(final Params params) {
-        this(params, ChParams.CONVERTERS);
-    }
-
-    public ChParams(final Params params, final Map<Class<?>, ParamConverter> converters) {
         this.params = params;
-        this.cvts = converters;
-    }
-
-    @Override
-    public Bindable with(final Class<?> clazz, final ParamConverter converter) {
-        final Map<Class<?>, ParamConverter> items = new MapOf<>(this.cvts);
-        items.put(clazz, converter);
-        return new ChParams(this.params, items);
     }
 
     @Override
     public Map<String, Object> map() {
         final Map<String, Object> result = new HashMap<>();
         for (final Param param : this.params.list()) {
-            result.put(param.name(), this.cvts.get(param.getClass()).convert(param));
+            result.put(param.name(), param.value().convert());
         }
         return result;
     }

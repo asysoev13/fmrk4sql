@@ -25,17 +25,39 @@
 
 package org.fmrk4sql.ch;
 
-import java.time.LocalDate;
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.StrVal;
 
 /**
- * Converts LocalDate param to String for binding in clickhouse queries.
+ * Clickhouse string value for queries.
  * @since 0.1.0
  */
-public final class LdConverter implements ParamConverter<LocalDate, String> {
+public final class ChStr implements Value<String, String> {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<String, String> origin;
+
+    public ChStr(final String val) {
+        this(new StrVal(val));
+    }
+
+    public ChStr(final Value origin) {
+        this.origin = origin;
+    }
+
     @Override
-    public String convert(final Param<LocalDate> param) {
-        return String.join("", "'", param.value().toString(), "'");
+    public String val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public String convert() {
+        String result = null;
+        if (this.origin.val() != null) {
+            result = String.join("", "'", this.origin.val(), "'");
+        }
+        return result;
     }
 }

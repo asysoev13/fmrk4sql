@@ -23,35 +23,36 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.val;
 
-import org.assertj.core.api.Assertions;
-import org.fmrk4sql.val.StrVal;
-import org.junit.jupiter.api.Test;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.fmrk4sql.Value;
 
 /**
- * Tests for param class.
+ * Fmrk4sql string value for queries.
  * @since 0.1.0
  */
-final class ParamTest {
-    @Test
-    void fmParamRenameWithNull() {
-        final Param param = new FmParam("table_name", new StrVal("fmrk_table"));
-        final NullPointerException exception = Assertions.catchThrowableOfType(
-            () -> param.rename(null), NullPointerException.class
-        );
-        Assertions
-            .assertThat(exception)
-            .isInstanceOf(NullPointerException.class)
-            .hasMessage("name is marked non-null but is null");
+@EqualsAndHashCode
+@ToString
+public final class StrVal implements Value<String, String> {
+
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final String value;
+
+    public StrVal(final String value) {
+        this.value = value;
     }
 
-    @Test
-    void fmParamRename() {
-        final Param param = new FmParam("table_name", new StrVal("fmrk_table"));
-        final Param expected = new FmParam("new_name", new StrVal("fmrk_table"));
-        Assertions
-            .assertThat(param.rename("new_name"))
-            .isEqualTo(expected);
+    @Override
+    public String val() {
+        return this.value;
+    }
+
+    @Override
+    public String convert() {
+        return this.value;
     }
 }

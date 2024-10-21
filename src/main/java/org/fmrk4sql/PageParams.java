@@ -32,6 +32,9 @@ import freemarker.template.TemplateModelException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.fmrk4sql.val.IntVal;
+import org.fmrk4sql.val.LongVal;
+import org.fmrk4sql.val.ObjVal;
 
 /**
  * Decorator at Params with pageable functionality.
@@ -47,12 +50,12 @@ public final class PageParams implements Params {
     private final List<Param> params;
 
     /**
-     * Link at decorated object.
+     * Link to decorated object.
      */
     private final transient Params origin;
 
     /**
-     * Link at decorated object.
+     * Link to decorated object.
      */
     private final transient Pageable pageable;
 
@@ -73,14 +76,24 @@ public final class PageParams implements Params {
     public TemplateModel get(final String name) throws TemplateModelException {
         if (this.params.isEmpty()) {
             this.params.addAll(this.origin.list());
-            this.params.add(new FmParam("page", this.pageable.page()));
-            this.params.add(new FmParam("size", this.pageable.size()));
-            this.params.add(new FmParam("orders", this.pageable.orders()));
+            this.params.add(new FmParam("page", new LongVal(this.pageable.page())));
+            this.params.add(new FmParam("size", new IntVal(this.pageable.size())));
+            this.params.add(new FmParam("orders", new ObjVal(this.pageable.orders())));
         }
+        final Param param = this.param(name);
         TemplateModel result = null;
+        if (param != null) {
+            result = this.wrapper.wrap(this.param(name).value().val());
+        }
+        return result;
+    }
+
+    @Override
+    public Param param(final String name) {
+        Param result = null;
         for (final Param param : this.params) {
             if (name.equals(param.name())) {
-                result = this.wrapper.wrap(param.value());
+                result = param;
                 break;
             }
         }
@@ -101,9 +114,9 @@ public final class PageParams implements Params {
     public List<Param> list() {
         if (this.params.isEmpty()) {
             this.params.addAll(this.origin.list());
-            this.params.add(new FmParam("page", this.pageable.page()));
-            this.params.add(new FmParam("size", this.pageable.size()));
-            this.params.add(new FmParam("orders", this.pageable.orders()));
+            this.params.add(new FmParam("page", new LongVal(this.pageable.page())));
+            this.params.add(new FmParam("size", new IntVal(this.pageable.size())));
+            this.params.add(new FmParam("orders", new ObjVal(this.pageable.orders())));
         }
         return Collections.unmodifiableList(this.params);
     }

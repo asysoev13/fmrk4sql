@@ -42,6 +42,4 @@ public interface Bindable {
      * @return Map of parameters
      */
     Map<String, Object> map();
-
-    Bindable with(Class<?> clazz, ParamConverter converter);
 }

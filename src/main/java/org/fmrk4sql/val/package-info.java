@@ -23,25 +23,12 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.ch;
-
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
-
 /**
- * Converts LocalDate param to String for binding in clickhouse queries.
+ * Freemarker for sql.
+ *
  * @since 0.1.0
  */
-public final class JsqlConverter implements ParamConverter<Date, String> {
-    @Override
-    public String convert(final Param<Date> param) {
-        final SimpleDateFormat format = new SimpleDateFormat(
-            "yyyy-MM-dd'T'hh:mm:ss",
-            Locale.getDefault()
-        );
-        return String.join("", "'", format.format(param.value()), "'");
-    }
-}
+package org.fmrk4sql.val;
+/**
+ * Package store fmrk4sql wrappers of objects.
+ */

@@ -23,18 +23,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.ch;
+package org.fmrk4sql.val;
 
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
+import java.util.Date;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.fmrk4sql.Value;
 
 /**
- * Converts Object param to Object for binding in clickhouse queries.
+ * Fmrk4sql java.util.Date value for queries.
  * @since 0.1.0
  */
-public final class FmConverter implements ParamConverter<Object, Object> {
+@EqualsAndHashCode
+@ToString
+public final class JdVal implements Value<Date, Date> {
+
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final Date value;
+
+    public JdVal(final Date value) {
+        this.value = value;
+    }
+
     @Override
-    public Object convert(final Param<Object> param) {
-        return  param.value();
+    public Date val() {
+        return this.value;
+    }
+
+    @Override
+    public Date convert() {
+        return this.value;
     }
 }

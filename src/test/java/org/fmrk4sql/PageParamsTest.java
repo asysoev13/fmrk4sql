@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
+import org.fmrk4sql.val.IntVal;
+import org.fmrk4sql.val.LongVal;
+import org.fmrk4sql.val.StrVal;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +45,6 @@ final class PageParamsTest {
     /**
      * Params factory.
      */
-    private final ParamsFactory factory = new FmParamsFactory();
-
     @Test
     void pageParamsToList() {
         final Pageable spring = PageRequest.of(
@@ -51,12 +52,14 @@ final class PageParamsTest {
             20,
             Sort.by(new Sort.Order(Sort.Direction.ASC, "test_col"))
         );
-        final Params params = this.factory.params("table_name4", "orderable_table");
+        final Params params = new FmParams(
+            new FmParam("table_name4", new StrVal("orderable_table"))
+        );
         final Params actual = new PageParams(params, new SpringPage(spring));
         final List<Param> expected = new ListOf(
             new FmParam("table_name4", "orderable_table"),
-            new FmParam("page", 0L),
-            new FmParam("size", 20),
+            new FmParam("page", new LongVal(0L)),
+            new FmParam("size", new IntVal(20)),
             new FmParam(
                 "orders",
                 new ListOf(new SpringOrder(new Sort.Order(Sort.Direction.ASC, "test_col")))
@@ -64,7 +67,7 @@ final class PageParamsTest {
         );
         Assertions.assertThat(actual.list())
             .hasSize(expected.size())
-            .extracting("pname", "pval")
+            .extracting(Param::name, Param::value)
             .containsExactlyElementsOf(
                 expected.stream().map(
                     p -> Assertions.tuple(p.name(), p.value())

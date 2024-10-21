@@ -31,6 +31,8 @@ import java.util.Collections;
 import org.assertj.core.api.Assertions;
 import org.fmrk4sql.fake.FakeOrder;
 import org.fmrk4sql.fake.FakePageable;
+import org.fmrk4sql.val.BoolVal;
+import org.fmrk4sql.val.StrVal;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,10 +43,6 @@ import org.springframework.data.domain.Sort;
  * @since 0.1.0
  */
 final class StrQueryTest {
-    /**
-     * Params this.factory.
-     */
-    private final ParamsFactory factory = new FmParamsFactory();
 
     @Test
     void parseSimpleQueryNoParam() throws TemplateException, IOException {
@@ -64,7 +62,7 @@ final class StrQueryTest {
             "select sum(fact_value) from table",
             "</#if>"
         );
-        final Params params = this.factory.params("plan", true);
+        final Params params = new FmParams(new FmParam("plan", new BoolVal(true)));
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
             .isEqualTo("select sum(plan_value) from table");
@@ -72,11 +70,11 @@ final class StrQueryTest {
 
     @Test
     void parseSimpleQueryTableName() throws TemplateException, IOException {
-        final String template =  String.join(
+        final String template = String.join(
             "",
             "select sum(plan_value) from ${table_name}"
         );
-        final Params params = this.factory.params("table_name", "fmrk_table");
+        final Params params = new FmParams(new FmParam("table_name", new StrVal("fmrk_table")));
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))
             .isEqualTo("select sum(plan_value) from fmrk_table");
@@ -89,7 +87,9 @@ final class StrQueryTest {
             "select sum(plan_value) from ${table_name1} ",
             "limit ${size} offset ${page}"
         );
-        final Params fmparams = this.factory.params("table_name1", "fmrk_table");
+        final Params fmparams = new FmParams(
+            new FmParam("table_name1", new StrVal("fmrk_table"))
+        );
         final Params params = new PageParams(
             fmparams,
             new FakePageable(0L, 10, Collections.EMPTY_LIST)
@@ -101,7 +101,7 @@ final class StrQueryTest {
 
     @Test
     void parseOnlyPageableParams() throws TemplateException, IOException {
-        final String template =  String.join(
+        final String template = String.join(
             "",
             "select sum(plan_value) from constant_table ",
             "limit ${size} offset ${page}"
@@ -117,7 +117,7 @@ final class StrQueryTest {
 
     @Test
     void parsePageableOrderable() throws TemplateException, IOException {
-        final String template =  String.join(
+        final String template = String.join(
             "",
             "select col1, col2 from ${table_name2}",
             "<#if orders?has_content> ",
@@ -128,7 +128,9 @@ final class StrQueryTest {
             "</#if>",
             "limit ${size} offset ${page}"
         );
-        final Params fmparams = this.factory.params("table_name2", "orderable_table");
+        final Params fmparams = new FmParams(
+            new FmParam("table_name2", new StrVal("orderable_table"))
+        );
         final Params params = new PageParams(
             fmparams,
             new FakePageable(0L, 10, new FakeOrder("col1", "ASC"))
@@ -158,7 +160,9 @@ final class StrQueryTest {
             "</#if>",
             "limit ${size} offset ${page}"
         );
-        final Params fmparams = this.factory.params("table_name3", "orderable_table");
+        final Params fmparams = new FmParams(
+            new FmParam("table_name3", new StrVal("orderable_table"))
+        );
         final Params params = new PageParams(fmparams, new SpringPage(spring));
         final Query query = new StrQuery(template);
         Assertions.assertThat(query.parse(params))

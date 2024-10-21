@@ -25,16 +25,41 @@
 
 package org.fmrk4sql.ch;
 
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
+import java.util.ArrayList;
+import java.util.List;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.IterableVal;
 
 /**
- * Converts String param to String for binding in clickhouse queries.
+ * Clickhouse List value for queries.
  * @since 0.1.0
  */
-public final class StrConverter implements ParamConverter<String, String> {
+public final class ChList implements Value {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<Iterable<Value>, Iterable> origin;
+
+    public ChList(final List val) {
+        this(new IterableVal(val));
+    }
+
+    private ChList(final Value origin) {
+        this.origin = origin;
+    }
+
     @Override
-    public String convert(final Param<String> param) {
-        return String.join("", "'", param.value(), "'");
+    public Iterable<Value> val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public Iterable convert() {
+        final List result = new ArrayList<>(10);
+        for (final Value val : this.origin.val()) {
+            result.add(val.convert());
+        }
+        return result;
     }
 }
