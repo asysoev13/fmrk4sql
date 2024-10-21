@@ -23,27 +23,36 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.params;
+package org.fmrk4sql.val;
 
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
-import org.fmrk4sql.FmParam;
+import org.fmrk4sql.Value;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
+ * Fmrk4sql boolean value for queries.
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public final class StrParam extends FmParam<String> {
+public final class BoolVal implements Value<Boolean, Boolean> {
 
-    public StrParam(final String name, final String val) {
-        super(name, val);
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final Boolean value;
+
+    public BoolVal(final Boolean value) {
+        this.value = value;
     }
 
-    public StrParam rename(@NonNull final String name) {
-        return new StrParam(name, this.value());
+    @Override
+    public Boolean val() {
+        return this.value;
+    }
+
+    @Override
+    public Boolean convert() {
+        return this.value;
     }
 }

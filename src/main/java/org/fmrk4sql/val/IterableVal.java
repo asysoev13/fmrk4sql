@@ -23,9 +23,36 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package org.fmrk4sql.val;
+
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.fmrk4sql.Value;
+
 /**
- * Extension FmParam with other standart types.
- *
+ * Fmrk4sql iterable value for queries.
  * @since 0.1.0
  */
-package org.fmrk4sql.params;
+@EqualsAndHashCode
+@ToString
+public final class IterableVal implements Value<Iterable, Iterable> {
+
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final Iterable value;
+
+    public IterableVal(final Iterable value) {
+        this.value = value;
+    }
+
+    @Override
+    public Iterable val() {
+        return this.value;
+    }
+
+    @Override
+    public Iterable convert() {
+        return this.value;
+    }
+}

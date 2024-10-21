@@ -23,27 +23,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.params;
+package org.fmrk4sql.ch;
 
-import java.time.LocalDateTime;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import org.fmrk4sql.FmParam;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.BoolVal;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
+ * Clickhouse boolean value for queries.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public final class LdtParam extends FmParam<LocalDateTime> {
-    public LdtParam(final String name, final LocalDateTime val) {
-        super(name, val);
+public final class ChBool implements Value<Boolean, Boolean> {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<Boolean, Boolean> origin;
+
+    public ChBool(final Boolean val) {
+        this(new BoolVal(val));
     }
 
-    public LdtParam rename(@NonNull final String name) {
-        return new LdtParam(name, this.value());
+    public ChBool(final Value origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public Boolean val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public Boolean convert() {
+        return this.origin.val();
     }
 }

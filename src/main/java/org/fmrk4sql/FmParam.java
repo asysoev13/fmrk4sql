@@ -25,19 +25,28 @@
 
 package org.fmrk4sql;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import org.fmrk4sql.val.DblVal;
+import org.fmrk4sql.val.IntVal;
+import org.fmrk4sql.val.JdVal;
+import org.fmrk4sql.val.JdsqlVal;
+import org.fmrk4sql.val.LdVal;
+import org.fmrk4sql.val.LongVal;
+import org.fmrk4sql.val.ObjVal;
+import org.fmrk4sql.val.StrVal;
 
 /**
  * Freemarker template parameter.
  * Contains name and value of parameter
- * @param <P> - Type of parameter
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public class FmParam<P> implements Param {
+public class FmParam implements Param {
     /**
      * Parameter name.
      */
@@ -46,11 +55,51 @@ public class FmParam<P> implements Param {
     /**
      * Parameter value.
      */
-    private final P pval;
+    private final Value pval;
 
-    public FmParam(final String name, final P val) {
+    public FmParam(final String name, final Value val) {
         this.pname = name;
         this.pval = val;
+    }
+
+    public FmParam(final String name, final String val) {
+        this(name, new StrVal(val));
+    }
+
+    public FmParam(final String name, final Long val) {
+        this(name, new LongVal(val));
+    }
+
+    public FmParam(final String name, final Integer val) {
+        this(name, new IntVal(val));
+    }
+
+    public FmParam(final String name, final Double val) {
+        this(name, new DblVal(val));
+    }
+
+    public FmParam(final String name, final Object val) {
+        this(name, new ObjVal(val));
+    }
+
+    public FmParam(final String name, final Iterable val) {
+        this(name, new ObjVal(val));
+    }
+
+    public FmParam(final String name, final LocalDateTime val) {
+        this(name, new ObjVal(val));
+    }
+
+    public FmParam(final String name, final LocalDate val) {
+        this(name, new LdVal(val));
+    }
+
+    public FmParam(final String name, final java.util.Date val) {
+        this(name, new JdVal(val));
+    }
+
+    public FmParam(final String name, final java.sql.Date val) {
+        this(name, new JdsqlVal(val));
     }
 
     /**
@@ -65,7 +114,7 @@ public class FmParam<P> implements Param {
      * Freemarker template parameter value.
      * @return Parameter value
      */
-    public P value() {
+    public Value value() {
         return this.pval;
     }
 

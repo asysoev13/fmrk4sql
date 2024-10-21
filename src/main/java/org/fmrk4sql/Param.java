@@ -28,10 +28,9 @@ package org.fmrk4sql;
 /**
  * Single parameter for freemarker template.
  *
- * @param <P> - type of parameter
  * @since 0.1.0
  */
-public interface Param<P> {
+public interface Param {
 
     /**
      * Freemarker template parameter name.
@@ -43,7 +42,7 @@ public interface Param<P> {
      * Freemarker template parameter value.
      * @return Parameter value
      */
-    P value();
+    Value value();
 
     /**
      * Return copy of object with changed name.
@@ -51,4 +50,5 @@ public interface Param<P> {
      * @return Parameter copy
      */
     Param rename(String name);
+
 }

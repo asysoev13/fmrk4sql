@@ -27,15 +27,14 @@ package org.fmrk4sql.fake;
 
 import org.fmrk4sql.FmParam;
 import org.fmrk4sql.Param;
+import org.fmrk4sql.Value;
 
 /**
  * Fake typed params.
  *
- * @param <P> - type of param
- *
  * @since 0.1.0
  */
-public final class FakeParam<P> implements Param {
+public final class FakeParam implements Param {
 
     /**
      * Param name.
@@ -45,9 +44,9 @@ public final class FakeParam<P> implements Param {
     /**
      * Param type.
      */
-    private final P pval;
+    private final Value pval;
 
-    public FakeParam(final String pname, final P pval) {
+    public FakeParam(final String pname, final Value pval) {
         this.pname = pname;
         this.pval = pval;
     }
@@ -58,7 +57,7 @@ public final class FakeParam<P> implements Param {
     }
 
     @Override
-    public P value() {
+    public Value value() {
         return this.pval;
     }
 

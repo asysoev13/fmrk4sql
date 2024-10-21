@@ -23,35 +23,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.ch;
 
-import org.assertj.core.api.Assertions;
-import org.fmrk4sql.val.StrVal;
-import org.junit.jupiter.api.Test;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.LongVal;
 
 /**
- * Tests for param class.
+ * Clickhouse long value for queries.
  * @since 0.1.0
  */
-final class ParamTest {
-    @Test
-    void fmParamRenameWithNull() {
-        final Param param = new FmParam("table_name", new StrVal("fmrk_table"));
-        final NullPointerException exception = Assertions.catchThrowableOfType(
-            () -> param.rename(null), NullPointerException.class
-        );
-        Assertions
-            .assertThat(exception)
-            .isInstanceOf(NullPointerException.class)
-            .hasMessage("name is marked non-null but is null");
+public final class ChLong implements Value<Long, Long> {
+
+    /**
+     * Link to decorated object.
+     */
+    private final Value<Long, Long> origin;
+
+    public ChLong(final Long val) {
+        this(new LongVal(val));
     }
 
-    @Test
-    void fmParamRename() {
-        final Param param = new FmParam("table_name", new StrVal("fmrk_table"));
-        final Param expected = new FmParam("new_name", new StrVal("fmrk_table"));
-        Assertions
-            .assertThat(param.rename("new_name"))
-            .isEqualTo(expected);
+    public ChLong(final Value origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public Long val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public Long convert() {
+        return this.origin.val();
     }
 }

@@ -33,12 +33,16 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import org.assertj.core.api.Assertions;
 import org.cactoos.list.ListOf;
+import org.fmrk4sql.ch.ChDbl;
+import org.fmrk4sql.ch.ChInt;
+import org.fmrk4sql.ch.ChJd;
+import org.fmrk4sql.ch.ChJdsql;
+import org.fmrk4sql.ch.ChLd;
+import org.fmrk4sql.ch.ChLdt;
+import org.fmrk4sql.ch.ChList;
+import org.fmrk4sql.ch.ChListStr;
 import org.fmrk4sql.ch.ChParams;
-import org.fmrk4sql.params.IntParam;
-import org.fmrk4sql.params.JdParam;
-import org.fmrk4sql.params.JsqlParam;
-import org.fmrk4sql.params.LdParam;
-import org.fmrk4sql.params.LdtParam;
+import org.fmrk4sql.ch.ChStr;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -67,10 +71,10 @@ final class ChParamsTest {
         ).parse("2024-01-01T10:11:12");
         final java.sql.Date jsqldate = new java.sql.Date(judate.getTime());
         final Params params = new FmParams(
-            new LdParam("date", this.date),
-            new LdtParam("datetime", this.datetime),
-            new JdParam("judate", judate),
-            new JsqlParam("jsqldate", jsqldate)
+            new FmParam("date", new ChLd(this.date)),
+            new FmParam("datetime", new ChLdt(this.datetime)),
+            new FmParam("judate", new ChJd(judate)),
+            new FmParam("jsqldate", new ChJdsql(jsqldate))
         );
         final Bindable chparams = new ChParams(params);
         Assertions
@@ -86,7 +90,7 @@ final class ChParamsTest {
     @Test
     void convertIntParamsToMap() {
         final Params params = new FmParams(
-            new IntParam("intvalue1", 13),
+            new FmParam("intvalue1", new ChInt(13)),
             new FmParam("fmvalue1", "value"),
             new FmParam("strvalue1", "'value'")
         );
@@ -101,10 +105,83 @@ final class ChParamsTest {
     }
 
     @Test
+    void convertStrParamsToMap() {
+        final Param strparam = new FmParam("strvalue1", new ChStr("value"));
+        final Bindable chparams = new ChParams(new FmParams(strparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("strvalue1", "'value'")
+            );
+    }
+
+    @Test
+    void convertNullStrParamsToMap() {
+        final String nullvalue = null;
+        final Param strparam = new FmParam("strnull1", new ChStr(nullvalue));
+        final Bindable chparams = new ChParams(new FmParams(strparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("strnull1", null)
+            );
+    }
+
+    @Test
+    void convertDoubleParamsToMap() {
+        final Param dblparam = new FmParam("dblvalue1", new ChDbl(3.14));
+        final Bindable chparams = new ChParams(new FmParams(dblparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("dblvalue1", 3.14)
+            );
+    }
+
+    @Test
+    void convertListStrParamsToMap() {
+        final Param listparam = new FmParam(
+            "list1",
+            new ChList(new ListOf<>(new ChStr("val1"), new ChStr("val2")))
+        );
+        final Bindable chparams = new ChParams(new FmParams(listparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("list1", new ListOf<>("'val1'", "'val2'"))
+            );
+    }
+
+    @Test
+    void convertListStrParamsAsStringToMap() {
+        final Param listparam = new FmParam(
+            "list2",
+            new ChListStr(new ListOf<>(new ChStr("val1"), new ChStr("val2")))
+        );
+        final Bindable chparams = new ChParams(new FmParams(listparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("list2", "'val1','val2'")
+            );
+    }
+
+    @Test
+    void convertListStrParamsAsStringToMapNoValues() {
+        final Param listparam = new FmParam("list3", new ChListStr(new ListOf<>()));
+        final Bindable chparams = new ChParams(new FmParams(listparam));
+        Assertions
+            .assertThat(chparams.map())
+            .contains(
+                Assertions.entry("list3", "")
+            );
+    }
+
+    @Test
     void caseParamsToMap() {
         final Params params = new CaseParams(
             new FmParams(
-                new LdParam("paramDate", this.date),
+                new FmParam("paramDate", new ChLd(this.date)),
                 new FmParam("tableName", "fmrk_table")
             ),
             CaseFormat.LOWER_CAMEL, CaseFormat.LOWER_UNDERSCORE

@@ -23,18 +23,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.ch;
-
-import org.fmrk4sql.Param;
-import org.fmrk4sql.ParamConverter;
+package org.fmrk4sql;
 
 /**
- * Converts integer param to integer for binding in clickhouse queries.
+ * Wrapper at java objects.
+ * @param <P> - type of value
+ * @param <T> - type of converting result
  * @since 0.1.0
  */
-public final class IntConverter implements ParamConverter<Integer, Integer> {
-    @Override
-    public Integer convert(final Param<Integer> param) {
-        return param.value();
-    }
+public interface Value<P, T> {
+
+    /**
+     * Value that wrapped.
+     * @return Value
+     */
+    P val();
+
+    /**
+     * Convertor of params when need bind parameters in queries.
+     * Bind params generates with map() methods in extensions of databases
+     * @return Converted param of T type
+     */
+    T convert();
 }

@@ -23,15 +23,46 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql;
+package org.fmrk4sql.ch;
+
+import java.util.List;
+import org.fmrk4sql.Value;
+import org.fmrk4sql.val.IterableVal;
 
 /**
- * Convertor of params when need bind parameters in queries.
- * Bind params generates with map() methods in extensions of databases
- * @param <T> - param type that should be converted
- * @param <P> - type that should be converted to
+ * Clickhouse List value converting as sting of lists for queries.
  * @since 0.1.0
  */
-public interface ParamConverter<T, P> {
-    P convert(Param<T> object);
+public final class ChListStr implements Value {
+    /**
+     * Link to decorated object.
+     */
+    private final Value<Iterable<Value>, String> origin;
+
+    public ChListStr(final List val) {
+        this(new IterableVal(val));
+    }
+
+    private ChListStr(final Value origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public Iterable<Value> val() {
+        return this.origin.val();
+    }
+
+    @Override
+    public String convert() {
+        String result = "";
+        for (final Value val : this.origin.val()) {
+            result = String.join(",", result, val.convert().toString());
+        }
+        if (result.isEmpty()) {
+            result = "";
+        } else {
+            result = result.substring(1);
+        }
+        return result;
+    }
 }

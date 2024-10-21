@@ -23,27 +23,36 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.params;
+package org.fmrk4sql.val;
 
-import java.sql.Date;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
-import org.fmrk4sql.FmParam;
+import org.fmrk4sql.Value;
 
 /**
- * Freemarker template parameter.
- * Contains name and value of parameter
+ * Fmrk4sql double value for queries.
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public final class JsqlParam extends FmParam<Date> {
-    public JsqlParam(final String name, final Date val) {
-        super(name, val);
+public final class DblVal implements Value<Double, Double> {
+
+    /**
+     * Stored value of fmrk4sql wrapper.
+     */
+    private final Double value;
+
+    public DblVal(final Double value) {
+        this.value = value;
     }
 
-    public JsqlParam rename(@NonNull final String name) {
-        return new JsqlParam(name, this.value());
+    @Override
+    public Double val() {
+        return this.value;
+    }
+
+    @Override
+    public Double convert() {
+        return this.value;
     }
 }

@@ -24,7 +24,7 @@
  */
 
 /**
- * Extension frm4sql for clickhouse database.
+ * Extension frm4sql for values and params for clickhouse database.
  *
  * @since 0.1.0
  */
