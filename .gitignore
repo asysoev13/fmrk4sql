@@ -6,3 +6,5 @@ local-repo/
 .settings/
 .classpath
 .project
+.claude
+.DS_Store
