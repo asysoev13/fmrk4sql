@@ -44,6 +44,9 @@ public final class JdVal implements Value<Date, Date> {
     private final Date value;
 
     public JdVal(final Date value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         this.value = value;
     }
 

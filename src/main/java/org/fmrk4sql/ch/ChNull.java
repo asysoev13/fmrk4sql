@@ -23,39 +23,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.val;
+package org.fmrk4sql.ch;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.fmrk4sql.Value;
+import org.fmrk4sql.val.StrVal;
 
 /**
- * Fmrk4sql string value for queries.
+ * Clickhouse null value for queries.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public final class StrVal implements Value<String, String> {
+public final class ChNull implements Value {
 
-    /**
-     * Stored value of fmrk4sql wrapper.
-     */
-    private final String value;
-
-    public StrVal(final String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
-        this.value = value;
+    public ChNull(){
     }
 
     @Override
     public String val() {
-        return this.value;
+        return null;
     }
 
     @Override
     public String convert() {
-        return this.value;
+        return "'null'";
     }
 }

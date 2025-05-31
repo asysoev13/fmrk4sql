@@ -30,32 +30,23 @@ import lombok.ToString;
 import org.fmrk4sql.Value;
 
 /**
- * Fmrk4sql string value for queries.
+ * Fmrk4sql object value for queries.
  * @since 0.1.0
  */
 @EqualsAndHashCode
 @ToString
-public final class StrVal implements Value<String, String> {
+public final class NullVal implements Value<Object, Object> {
 
-    /**
-     * Stored value of fmrk4sql wrapper.
-     */
-    private final String value;
-
-    public StrVal(final String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
-        this.value = value;
+    public NullVal(){
     }
 
     @Override
-    public String val() {
-        return this.value;
+    public Object val() {
+        throw new UnsupportedOperationException("NullVal is not supported");
     }
 
     @Override
-    public String convert() {
-        return this.value;
+    public Object convert() {
+        throw new UnsupportedOperationException("NullVal is not supported");
     }
 }

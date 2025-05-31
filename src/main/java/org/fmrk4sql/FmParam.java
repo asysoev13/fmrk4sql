@@ -57,7 +57,14 @@ public class FmParam implements Param {
      */
     private final Value pval;
 
+
     public FmParam(final String name, final Value val) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Parameter name cannot be null or empty");
+        }
+        if (val == null) {
+            throw new IllegalArgumentException("Parameter value cannot be null");
+        }
         this.pname = name;
         this.pval = val;
     }

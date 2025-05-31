@@ -43,6 +43,9 @@ public final class IterableVal implements Value<Iterable, Iterable> {
     private final Iterable value;
 
     public IterableVal(final Iterable value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         this.value = value;
     }
 

@@ -43,6 +43,9 @@ public final class DblVal implements Value<Double, Double> {
     private final Double value;
 
     public DblVal(final Double value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         this.value = value;
     }
 

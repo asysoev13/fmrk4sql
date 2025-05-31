@@ -43,6 +43,9 @@ public final class IntVal implements Value<Integer, Integer> {
     private final Integer value;
 
     public IntVal(final Integer value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         this.value = value;
     }
 

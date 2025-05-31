@@ -43,6 +43,9 @@ public final class ObjVal implements Value<Object, Object> {
     private final Object value;
 
     public ObjVal(final Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         this.value = value;
     }
 

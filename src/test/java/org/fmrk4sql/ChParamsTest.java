@@ -41,8 +41,10 @@ import org.fmrk4sql.ch.ChLd;
 import org.fmrk4sql.ch.ChLdt;
 import org.fmrk4sql.ch.ChList;
 import org.fmrk4sql.ch.ChListStr;
+import org.fmrk4sql.ch.ChNull;
 import org.fmrk4sql.ch.ChParams;
 import org.fmrk4sql.ch.ChStr;
+import org.fmrk4sql.val.NullVal;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -117,13 +119,12 @@ final class ChParamsTest {
 
     @Test
     void convertNullStrParamsToMap() {
-        final String nullvalue = null;
-        final Param strparam = new FmParam("strnull1", new ChStr(nullvalue));
+        final Param strparam = new FmParam("strnull1", new ChNull());
         final Bindable chparams = new ChParams(new FmParams(strparam));
         Assertions
             .assertThat(chparams.map())
             .contains(
-                Assertions.entry("strnull1", null)
+                Assertions.entry("strnull1", "'null'")
             );
     }
 
