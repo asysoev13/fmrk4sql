@@ -68,6 +68,10 @@ Tests use JUnit 5 and AssertJ. The `fake/` package contains test implementations
 - After important functionality added, update README.md accordingly
 - When merging master changes to an active branch, make sure both branches are pulled and up to date first
 - Don't add "Test plan" section to PRs
+- No empty line inside method
+- Variable names must match pattern '^(id|[a-z]{3,12})$'
+- All files should end with new line
+- Copy license text from file [LICENSE.txt](LICENSE.txt)
 
 ### Git Workflow
 

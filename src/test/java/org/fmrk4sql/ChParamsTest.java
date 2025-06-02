@@ -44,7 +44,6 @@ import org.fmrk4sql.ch.ChListStr;
 import org.fmrk4sql.ch.ChNull;
 import org.fmrk4sql.ch.ChParams;
 import org.fmrk4sql.ch.ChStr;
-import org.fmrk4sql.val.NullVal;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

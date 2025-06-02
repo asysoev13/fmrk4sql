@@ -43,19 +43,22 @@ public final class StrVal implements Value<String, String> {
     private final String value;
 
     public StrVal(final String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
         this.value = value;
     }
 
     @Override
     public String val() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 
     @Override
     public String convert() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 }

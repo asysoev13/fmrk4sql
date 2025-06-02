@@ -23,42 +23,33 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.fmrk4sql.val;
+package org.fmrk4sql;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.fmrk4sql.Value;
+import org.assertj.core.api.Assertions;
+import org.fmrk4sql.val.NullVal;
+import org.junit.jupiter.api.Test;
 
 /**
- * Fmrk4sql double value for queries.
+ * Tests for NullVal class.
  * @since 0.1.0
  */
-@EqualsAndHashCode
-@ToString
-public final class DblVal implements Value<Double, Double> {
+final class NullValTest {
 
-    /**
-     * Stored value of fmrk4sql wrapper.
-     */
-    private final Double value;
-
-    public DblVal(final Double value) {
-        this.value = value;
+    @Test
+    void shouldThrowExceptionWhenValIsCalled() {
+        final NullVal nullval = new NullVal();
+        Assertions
+            .assertThatThrownBy(nullval::val)
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("NullVal is not supported");
     }
 
-    @Override
-    public Double val() {
-        if (this.value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
-        return this.value;
-    }
-
-    @Override
-    public Double convert() {
-        if (this.value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
-        return this.value;
+    @Test
+    void shouldThrowExceptionWhenConvertIsCalled() {
+        final NullVal nullval = new NullVal();
+        Assertions
+            .assertThatThrownBy(nullval::convert)
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasMessage("NullVal is not supported");
     }
 }

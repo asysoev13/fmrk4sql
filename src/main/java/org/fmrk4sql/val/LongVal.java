@@ -43,19 +43,22 @@ public final class LongVal implements Value<Long, Long> {
     private final Long value;
 
     public LongVal(final Long value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
         this.value = value;
     }
 
     @Override
     public Long val() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 
     @Override
     public Long convert() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 }

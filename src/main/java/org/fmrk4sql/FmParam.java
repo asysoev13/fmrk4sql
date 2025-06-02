@@ -57,14 +57,7 @@ public class FmParam implements Param {
      */
     private final Value pval;
 
-
     public FmParam(final String name, final Value val) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Parameter name cannot be null or empty");
-        }
-        if (val == null) {
-            throw new IllegalArgumentException("Parameter value cannot be null");
-        }
         this.pname = name;
         this.pval = val;
     }
@@ -114,6 +107,9 @@ public class FmParam implements Param {
      * @return Parameter name
      */
     public String name() {
+        if (this.pname == null || this.pname.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
         return this.pname;
     }
 
@@ -122,6 +118,9 @@ public class FmParam implements Param {
      * @return Parameter value
      */
     public Value value() {
+        if (this.pval == null) {
+            throw new IllegalArgumentException("Parameter value cannot be null");
+        }
         return this.pval;
     }
 
@@ -131,6 +130,9 @@ public class FmParam implements Param {
      * @return Parameter copy
      */
     public Param rename(@NonNull final String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
         return new FmParam(name, this.pval);
     }
 }

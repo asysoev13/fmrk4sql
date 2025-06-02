@@ -26,17 +26,12 @@
 package org.fmrk4sql.ch;
 
 import org.fmrk4sql.Value;
-import org.fmrk4sql.val.StrVal;
 
 /**
  * Clickhouse null value for queries.
  * @since 0.1.0
  */
 public final class ChNull implements Value {
-
-    public ChNull(){
-    }
-
     @Override
     public String val() {
         return null;

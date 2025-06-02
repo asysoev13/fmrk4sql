@@ -36,10 +36,6 @@ import org.fmrk4sql.Value;
 @EqualsAndHashCode
 @ToString
 public final class NullVal implements Value<Object, Object> {
-
-    public NullVal(){
-    }
-
     @Override
     public Object val() {
         throw new UnsupportedOperationException("NullVal is not supported");

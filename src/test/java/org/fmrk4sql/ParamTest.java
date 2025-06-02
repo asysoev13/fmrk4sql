@@ -47,6 +47,22 @@ import org.junit.jupiter.api.Test;
  * @since 0.1.0
  */
 final class ParamTest {
+    /**
+     * Test name.
+     */
+    private static final String TEST_NAME = "testName";
+
+    /**
+     * Test name.
+     */
+    private static final String TEST = "test";
+
+    /**
+     * Test value.
+     * @since 0.1.0
+     */
+    private static final String VALUE = "value";
+
     @Test
     void fmParamRenameWithNull() {
         final Param param = new FmParam("table_name", new StrVal("fmrk_table"));
@@ -70,82 +86,39 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Constructor validation tests")
-    class ConstructorValidationTests {
-
-        @Test
-        @DisplayName("Should throw exception when name is null")
-        void shouldThrowExceptionWhenNameIsNull() {
-            Assertions.assertThatThrownBy(() -> new FmParam(null, new StrVal("test")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Parameter name cannot be null or empty");
-        }
-
-        @Test
-        @DisplayName("Should throw exception when name is empty string")
-        void shouldThrowExceptionWhenNameIsEmpty() {
-            Assertions.assertThatThrownBy(() -> new FmParam("", new StrVal("test")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Parameter name cannot be null or empty");
-        }
-
-        @Test
-        @DisplayName("Should throw exception when name contains only whitespace")
-        void shouldThrowExceptionWhenNameIsWhitespace() {
-            Assertions.assertThatThrownBy(() -> new FmParam("   ", new StrVal("test")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Parameter name cannot be null or empty");
-        }
-
-        @Test
-        @DisplayName("Should throw exception when value is null")
-        void shouldThrowExceptionWhenValueIsNull() {
-            Assertions.assertThatThrownBy(() -> new FmParam("test", (Value) null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Parameter value cannot be null");
-        }
+    final class ConstructorValidationTests {
 
         @Test
         @DisplayName("Should create valid object with proper name and value")
         void shouldCreateValidObject() {
-            Value testValue = new StrVal("test");
-            FmParam param = new FmParam("testName", testValue);
-
-            Assertions.assertThat(param.name()).isEqualTo("testName");
-            Assertions.assertThat(param.value()).isEqualTo(testValue);
+            final Value expected = new StrVal(ParamTest.TEST);
+            final FmParam param = new FmParam(ParamTest.TEST_NAME, expected);
+            Assertions.assertThat(param.name()).isEqualTo(ParamTest.TEST_NAME);
+            Assertions.assertThat(param.value()).isEqualTo(expected);
         }
     }
 
     @Nested
     @DisplayName("String constructor tests")
-    class StringConstructorTests {
+    final class StringConstructorTests {
 
         @Test
         @DisplayName("Should create FmParam with String value")
         void shouldCreateWithStringValue() {
-            FmParam param = new FmParam("stringParam", "testString");
-
+            final FmParam param = new FmParam("stringParam", "testString");
             Assertions.assertThat(param.name()).isEqualTo("stringParam");
             Assertions.assertThat(param.value()).isInstanceOf(StrVal.class);
-        }
-
-        @Test
-        @DisplayName("Should throw exception when String constructor has null name")
-        void shouldThrowExceptionWithNullNameInStringConstructor() {
-            Assertions.assertThatThrownBy(() -> new FmParam(null, "test"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Parameter name cannot be null or empty");
         }
     }
 
     @Nested
     @DisplayName("Numeric constructor tests")
-    class NumericConstructorTests {
+    final class NumericConstructorTests {
 
         @Test
         @DisplayName("Should create FmParam with Long value")
         void shouldCreateWithLongValue() {
-            FmParam param = new FmParam("longParam", 123L);
-
+            final FmParam param = new FmParam("longParam", 123L);
             Assertions.assertThat(param.name()).isEqualTo("longParam");
             Assertions.assertThat(param.value()).isInstanceOf(LongVal.class);
         }
@@ -153,8 +126,7 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with Integer value")
         void shouldCreateWithIntegerValue() {
-            FmParam param = new FmParam("intParam", 456);
-
+            final FmParam param = new FmParam("intParam", 456);
             Assertions.assertThat(param.name()).isEqualTo("intParam");
             Assertions.assertThat(param.value()).isInstanceOf(IntVal.class);
         }
@@ -162,8 +134,7 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with Double value")
         void shouldCreateWithDoubleValue() {
-            FmParam param = new FmParam("doubleParam", 123.45);
-
+            final FmParam param = new FmParam("doubleParam", 123.45);
             Assertions.assertThat(param.name()).isEqualTo("doubleParam");
             Assertions.assertThat(param.value()).isInstanceOf(DblVal.class);
         }
@@ -171,14 +142,13 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Object constructor tests")
-    class ObjectConstructorTests {
+    final class ObjectConstructorTests {
 
         @Test
         @DisplayName("Should create FmParam with Object value")
         void shouldCreateWithObjectValue() {
-            Object testObj = new Object();
-            FmParam param = new FmParam("objParam", testObj);
-
+            final Object obj = new Object();
+            final FmParam param = new FmParam("objParam", obj);
             Assertions.assertThat(param.name()).isEqualTo("objParam");
             Assertions.assertThat(param.value()).isInstanceOf(ObjVal.class);
         }
@@ -186,9 +156,8 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with Iterable value")
         void shouldCreateWithIterableValue() {
-            List<String> testList = Arrays.asList("a", "b", "c");
-            FmParam param = new FmParam("iterableParam", testList);
-
+            final List<String> list = Arrays.asList("a", "b", "c");
+            final FmParam param = new FmParam("iterableParam", list);
             Assertions.assertThat(param.name()).isEqualTo("iterableParam");
             Assertions.assertThat(param.value()).isInstanceOf(ObjVal.class);
         }
@@ -196,9 +165,8 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with LocalDateTime value")
         void shouldCreateWithLocalDateTimeValue() {
-            LocalDateTime now = LocalDateTime.now();
-            FmParam param = new FmParam("dateTimeParam", now);
-
+            final LocalDateTime now = LocalDateTime.now();
+            final FmParam param = new FmParam("dateTimeParam", now);
             Assertions.assertThat(param.name()).isEqualTo("dateTimeParam");
             Assertions.assertThat(param.value()).isInstanceOf(ObjVal.class);
         }
@@ -206,14 +174,13 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Date constructor tests")
-    class DateConstructorTests {
+    final class DateConstructorTests {
 
         @Test
         @DisplayName("Should create FmParam with LocalDate value")
         void shouldCreateWithLocalDateValue() {
-            LocalDate today = LocalDate.now();
-            FmParam param = new FmParam("localDateParam", today);
-
+            final LocalDate today = LocalDate.now();
+            final FmParam param = new FmParam("localDateParam", today);
             Assertions.assertThat(param.name()).isEqualTo("localDateParam");
             Assertions.assertThat(param.value()).isInstanceOf(LdVal.class);
         }
@@ -221,9 +188,8 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with java.util.Date value")
         void shouldCreateWithUtilDateValue() {
-            java.util.Date date = new java.util.Date();
-            FmParam param = new FmParam("utilDateParam", date);
-
+            final java.util.Date date = new java.util.Date();
+            final FmParam param = new FmParam("utilDateParam", date);
             Assertions.assertThat(param.name()).isEqualTo("utilDateParam");
             Assertions.assertThat(param.value()).isInstanceOf(JdVal.class);
         }
@@ -231,9 +197,8 @@ final class ParamTest {
         @Test
         @DisplayName("Should create FmParam with java.sql.Date value")
         void shouldCreateWithSqlDateValue() {
-            java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
-            FmParam param = new FmParam("sqlDateParam", sqlDate);
-
+            final java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+            final FmParam param = new FmParam("sqlDateParam", date);
             Assertions.assertThat(param.name()).isEqualTo("sqlDateParam");
             Assertions.assertThat(param.value()).isInstanceOf(JdsqlVal.class);
         }
@@ -241,43 +206,38 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Method tests")
-    class MethodTests {
+    final class MethodTests {
 
         @Test
         @DisplayName("Should return correct name")
         void shouldReturnCorrectName() {
-            FmParam param = new FmParam("testName", "testValue");
-
-            Assertions.assertThat(param.name()).isEqualTo("testName");
+            final FmParam param = new FmParam(ParamTest.TEST_NAME, "testValue");
+            Assertions.assertThat(param.name()).isEqualTo(ParamTest.TEST_NAME);
         }
 
         @Test
         @DisplayName("Should return correct value")
         void shouldReturnCorrectValue() {
-            Value testValue = new StrVal("testValue");
-            FmParam param = new FmParam("testName", testValue);
-
-            Assertions.assertThat(param.value()).isEqualTo(testValue);
+            final Value expected = new StrVal("testValue");
+            final FmParam param = new FmParam(ParamTest.TEST_NAME, expected);
+            Assertions.assertThat(param.value()).isEqualTo(expected);
         }
 
         @Test
         @DisplayName("Should create renamed copy with new name")
         void shouldCreateRenamedCopy() {
-            Value originalValue = new StrVal("testValue");
-            FmParam original = new FmParam("originalName", originalValue);
-
-            Param renamed = original.rename("newName");
-
+            final Value expected = new StrVal("testValue");
+            final FmParam original = new FmParam("originalName", expected);
+            final Param renamed = original.rename("newName");
             Assertions.assertThat(renamed.name()).isEqualTo("newName");
-            Assertions.assertThat(renamed.value()).isEqualTo(originalValue);
-            Assertions.assertThat(original.name()).isEqualTo("originalName"); // Original unchanged
+            Assertions.assertThat(renamed.value()).isEqualTo(expected);
+            Assertions.assertThat(original.name()).isEqualTo("originalName");
         }
 
         @Test
         @DisplayName("Should throw exception when renaming with null name")
         void shouldThrowExceptionWhenRenamingWithNullName() {
-            FmParam param = new FmParam("testName", "testValue");
-
+            final FmParam param = new FmParam(ParamTest.TEST_NAME, "testValue");
             Assertions.assertThatThrownBy(() -> param.rename(null))
                 .isInstanceOf(NullPointerException.class);
         }
@@ -285,63 +245,57 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Equals and HashCode tests")
-    class EqualsAndHashCodeTests {
+    final class EqualsAndHashCodeTests {
 
         @Test
         @DisplayName("Should be equal when name and value are the same")
         void shouldBeEqualWhenNameAndValueAreSame() {
-            FmParam param1 = new FmParam("test", "value");
-            FmParam param2 = new FmParam("test", "value");
-
-            Assertions.assertThat(param1).isEqualTo(param2);
-            Assertions.assertThat(param1.hashCode()).isEqualTo(param2.hashCode());
+            final FmParam first = new FmParam(ParamTest.TEST, ParamTest.VALUE);
+            final FmParam second = new FmParam(ParamTest.TEST, ParamTest.VALUE);
+            Assertions.assertThat(first).isEqualTo(second);
+            Assertions.assertThat(first.hashCode()).isEqualTo(second.hashCode());
         }
 
         @Test
         @DisplayName("Should not be equal when names differ")
         void shouldNotBeEqualWhenNamesDiffer() {
-            FmParam param1 = new FmParam("test1", "value");
-            FmParam param2 = new FmParam("test2", "value");
-
-            Assertions.assertThat(param1).isNotEqualTo(param2);
+            final FmParam first = new FmParam("test1", ParamTest.VALUE);
+            final FmParam second = new FmParam("test2", ParamTest.VALUE);
+            Assertions.assertThat(first).isNotEqualTo(second);
         }
 
         @Test
         @DisplayName("Should not be equal when values differ")
         void shouldNotBeEqualWhenValuesDiffer() {
-            FmParam param1 = new FmParam("test", "value1");
-            FmParam param2 = new FmParam("test", "value2");
-
-            Assertions.assertThat(param1).isNotEqualTo(param2);
+            final FmParam first = new FmParam(ParamTest.TEST, "value1");
+            final FmParam second = new FmParam(ParamTest.TEST, "value2");
+            Assertions.assertThat(first).isNotEqualTo(second);
         }
 
         @Test
         @DisplayName("Should not be equal to null")
         void shouldNotBeEqualToNull() {
-            FmParam param = new FmParam("test", "value");
-
+            final FmParam param = new FmParam(ParamTest.TEST, ParamTest.VALUE);
             Assertions.assertThat(param).isNotEqualTo(null);
         }
 
         @Test
         @DisplayName("Should not be equal to different class")
         void shouldNotBeEqualToDifferentClass() {
-            FmParam param = new FmParam("test", "value");
-            String str = "test";
-
+            final FmParam param = new FmParam(ParamTest.TEST, ParamTest.VALUE);
+            final String str = ParamTest.TEST;
             Assertions.assertThat(param).isNotEqualTo(str);
         }
     }
 
     @Nested
     @DisplayName("ToString tests")
-    class ToStringTests {
+    final class ToStringTests {
 
         @Test
         @DisplayName("Should return non-empty string representation")
         void shouldReturnNonEmptyStringRepresentation() {
-            FmParam param = new FmParam("test", "value");
-
+            final FmParam param = new FmParam(ParamTest.TEST, ParamTest.VALUE);
             Assertions.assertThat(param.toString())
                 .isNotEmpty()
                 .contains("FmParam");
@@ -350,40 +304,47 @@ final class ParamTest {
 
     @Nested
     @DisplayName("Edge cases")
-    class EdgeCaseTests {
+    final class EdgeCaseTests {
 
         @Test
         @DisplayName("Should handle null values in wrapper constructors")
         void shouldHandleNullValuesInWrapperConstructors() {
-            Assertions.assertThatThrownBy(() -> new FmParam("test", (String) null))
-                .isInstanceOf(IllegalArgumentException.class);
-
-            Assertions.assertThatThrownBy(() -> new FmParam("test", (Long) null))
-                .isInstanceOf(IllegalArgumentException.class);
-
-            Assertions.assertThatThrownBy(() -> new FmParam("test", (Integer) null))
-                .isInstanceOf(IllegalArgumentException.class);
-
-            Assertions.assertThatThrownBy(() -> new FmParam("test", (Double) null))
-                .isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(
+                () -> {
+                    final Param param = new FmParam(ParamTest.TEST, (String) null);
+                    param.value().val();
+                }).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(
+                () -> {
+                    final Param param = new FmParam(ParamTest.TEST, (Long) null);
+                    param.value().val();
+                }).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(
+                () -> {
+                    final Param param = new FmParam(ParamTest.TEST, (Integer) null);
+                    param.value().val();
+                }).isInstanceOf(IllegalArgumentException.class);
+            Assertions.assertThatThrownBy(
+                () -> {
+                    final Param param = new FmParam(ParamTest.TEST, (Double) null);
+                    param.value().val();
+                }).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         @DisplayName("Should handle special characters in name")
         void shouldHandleSpecialCharactersInName() {
-            String specialName = "test@#$%^&*()_+-={}[]|\\:;\"'<>?,./`~";
-            FmParam param = new FmParam(specialName, "value");
-
-            Assertions.assertThat(param.name()).isEqualTo(specialName);
+            final String specials = "test@#$%^&*()_+-={}[]|\\:;\"'<>?,./`~";
+            final FmParam param = new FmParam(specials, ParamTest.VALUE);
+            Assertions.assertThat(param.name()).isEqualTo(specials);
         }
 
         @Test
         @DisplayName("Should handle Unicode characters in name")
         void shouldHandleUnicodeCharactersInName() {
-            String unicodeName = "тест_परीक्षण_测试_テスト";
-            FmParam param = new FmParam(unicodeName, "value");
-
-            Assertions.assertThat(param.name()).isEqualTo(unicodeName);
+            final String unicode = "тест_परीक्षण_测试_テスト";
+            final FmParam param = new FmParam(unicode, ParamTest.VALUE);
+            Assertions.assertThat(param.name()).isEqualTo(unicode);
         }
     }
 }

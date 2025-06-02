@@ -74,3 +74,4 @@ final class CaseParamsTest {
         Assertions.assertThat(params.list()).isEqualTo(expected);
     }
 }
+

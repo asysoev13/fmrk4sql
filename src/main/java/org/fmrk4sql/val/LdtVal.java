@@ -44,19 +44,22 @@ public final class LdtVal implements Value<LocalDateTime, LocalDateTime> {
     private final LocalDateTime value;
 
     public LdtVal(final LocalDateTime value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
         this.value = value;
     }
 
     @Override
     public LocalDateTime val() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 
     @Override
     public LocalDateTime convert() {
+        if (this.value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
         return this.value;
     }
 }
